@@ -3,6 +3,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --font-sans: "Open Sans", sans;
+  --color-backgroundColor: #e8e8e8;
+  --color-sidebarColor: #191919;
+  --color-selectedTab: #299d91;
+}
+
 body,
 main,
 #root {
