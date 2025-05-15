@@ -106,7 +106,7 @@ export default function Sidebar({ ...rest }) {
 
       {user === null ? (
         <form
-          className="flex flex-col gap-4 rounded-2xl bg-gray-700 px-8 py-5 text-xl font-bold"
+          className="mt-2 flex flex-col gap-4 rounded-2xl bg-gray-700 px-8 py-5 text-xl font-bold"
           action={handleLogin}
         >
           <p>Sign in!</p>
