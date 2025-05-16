@@ -9,8 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { invoices } from "@/sampleData"
+import { type Vault } from "../../lib/types"
 
-export default function VaultTable() {
+type VaultTableProps = {
+  vaults: Vault[]
+}
+
+export default function VaultTable({ vaults }: VaultTableProps) {
+  console.log("vaults", vaults)
   return (
     <Table>
       <TableCaption>A list of your vaults.</TableCaption>

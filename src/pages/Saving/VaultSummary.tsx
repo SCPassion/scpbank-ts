@@ -18,12 +18,11 @@ export default function VaultSummary() {
     user?.email && fetchVaults(user.email)
   }, [user])
 
-  console.log("vaults", vaults)
   async function fetchVaults(email: string) {
     try {
       const { data, error }: SupabaseResponse = await supabase
         .from("vaults")
-        .select("purpose, target, number_of_weeks, id")
+        .select("purpose, target, number_of_weeks, id, saved_amount")
         .eq("user_email", email)
 
       if (error) {
@@ -40,7 +39,11 @@ export default function VaultSummary() {
   return (
     <div className="flex flex-col items-center gap-4 px-12 py-4">
       <h1 className="text-4xl font-bold">Vault Summary</h1>
-      <VaultTable />
+      {vaults.length > 0 ? (
+        <VaultTable vaults={vaults} />
+      ) : (
+        <p>No vaults found.</p>
+      )}
     </div>
   )
 }

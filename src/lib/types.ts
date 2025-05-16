@@ -3,4 +3,5 @@ export type Vault = {
   target: number
   number_of_weeks: number
   id: number
+  saved_amount: number
 }

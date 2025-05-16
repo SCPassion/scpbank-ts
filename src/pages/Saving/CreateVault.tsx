@@ -24,6 +24,7 @@ export default function CreateVault() {
         purpose: goalName,
         target: targetAmount,
         number_of_weeks: durationInWeeks,
+        saved_amount: 0,
       })
 
     if (insertError) {
