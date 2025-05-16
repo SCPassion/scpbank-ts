@@ -13,13 +13,11 @@ import { useEffect } from "react"
 export default function Sidebar({ ...rest }) {
   const { user, setUser } = useUserStore()
 
-  console.log("user", user)
-
   useEffect(() => {
     console.log("listening for auth changes")
     const session = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("event", session?.user)
       if (session?.user) {
+        console.log("user", session?.user)
         setUser(session.user)
         //createRow(session.user)
       }

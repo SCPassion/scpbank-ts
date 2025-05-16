@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { invoices } from "@/sampleData"
 import { type Vault } from "../../lib/types"
 
 type VaultTableProps = {
@@ -16,32 +15,59 @@ type VaultTableProps = {
 }
 
 export default function VaultTable({ vaults }: VaultTableProps) {
-  console.log("vaults", vaults)
+  const totalSavedAmount = vaults.reduce(
+    (total, vault) => total + vault.saved_amount,
+    0,
+  )
+  const totalTarget = vaults.reduce((total, vault) => total + vault.target, 0)
   return (
     <Table>
       <TableCaption>A list of your vaults.</TableCaption>
       <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+        <TableRow className="text-xl">
+          <TableHead className="w-[100px] font-bold">Vault's Purpose</TableHead>
+          <TableHead className="text-center font-bold">
+            Number of Weeks
+          </TableHead>
+          <TableHead className="text-center font-bold">Saved amount</TableHead>
+          <TableHead className="text-right font-bold">Target</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+      <TableBody className="text-lg">
+        {vaults.map((vault) => (
+          <TableRow key={vault.id}>
+            <TableCell className="font-medium">{vault.purpose}</TableCell>
+            <TableCell className="text-center">
+              {vault.number_of_weeks}
+            </TableCell>
+            <TableCell className="text-center">{`$${vault.saved_amount}`}</TableCell>
+            <TableCell className="text-right">{`$${vault.target}`}</TableCell>
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
+        <TableRow className="text-xl">
+          <TableHead colSpan={4} className="w-[100px] text-center font-bold">
+            Overall
+          </TableHead>
+        </TableRow>
         <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
+          <TableCell colSpan={2} className="text-center">
+            Total saved
+          </TableCell>
+          <TableCell
+            colSpan={2}
+            className="text-center"
+          >{`$${totalSavedAmount}`}</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell colSpan={2} className="text-center">
+            Vaults' Target in total
+          </TableCell>
+          <TableCell
+            colSpan={2}
+            className="text-center"
+          >{`$${totalTarget}`}</TableCell>
         </TableRow>
       </TableFooter>
     </Table>

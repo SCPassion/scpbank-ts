@@ -37,7 +37,7 @@ export default function VaultSummary() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 px-12 py-4">
+    <div className="flex flex-col items-center gap-8 px-35 py-4">
       <h1 className="text-4xl font-bold">Vault Summary</h1>
       {vaults.length > 0 ? (
         <VaultTable vaults={vaults} />
