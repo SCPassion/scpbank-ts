@@ -35,41 +35,6 @@ export default function Sidebar({ ...rest }) {
     setUser(null)
   }
 
-  async function createRow(user: User) {
-    console.log("Checking if user exists in table:", user.email)
-    const { data, error } = await supabase
-      .from("vaults")
-      .select("user_email")
-      .eq("user_email", user.email)
-
-    if (error) {
-      console.error("Error checking user in table:", error.message)
-      return
-    }
-
-    if (data && data.length > 0) {
-      console.log("User already exists in table:", user.email)
-      return
-    }
-
-    //Insert user data into the sale table, store the error to a new variable called insertError
-    const { error: insertError }: { error: PostgrestError | null } =
-      await supabase.from("vaults").insert({
-        user_id: user.id,
-        created_at: new Date().toISOString(),
-        user_email: user.email,
-        purpose: "vacation",
-        target: 1001.5,
-        number_of_weeks: 10,
-      })
-
-    if (insertError) {
-      console.error("Error inserting user into table:", insertError.message)
-      return
-    }
-    console.log("User inserted into table:", user.email)
-  }
-
   async function signInWithOTP(email: string): Promise<void> {
     try {
       console.log("signing in with email:", email)
