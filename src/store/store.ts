@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { type User } from "@supabase/supabase-js"
+import { type Vault } from "@/lib/types"
 
 type UserStore = {
   user: User | null
@@ -9,4 +10,16 @@ type UserStore = {
 export const useUserStore = create<UserStore>((set) => ({
   user: null,
   setUser: (user) => set({ user }),
+}))
+
+type VaultStore = {
+  vaults: Vault[]
+  setVaults: (vaults: Vault[]) => void
+  addVault: (vault: Vault) => void
+}
+
+export const useVaultStore = create<VaultStore>((set) => ({
+  vaults: [],
+  setVaults: (vaults) => set({ vaults }),
+  addVault: (vault) => set((state) => ({ vaults: [...state.vaults, vault] })),
 }))

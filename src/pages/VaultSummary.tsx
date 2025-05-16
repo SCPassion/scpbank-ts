@@ -2,12 +2,7 @@ import { useUserStore } from "@/store/store"
 import { supabase } from "@/supabase-client"
 import type { PostgrestError, User } from "@supabase/supabase-js"
 import { useEffect } from "react"
-
-type Vault = {
-  purpose: string
-  target: number
-  number_of_weeks: number
-}
+import { type Vault } from "@/lib/types"
 
 type SupabaseResponse = {
   data: Vault[] | null
@@ -16,6 +11,10 @@ type SupabaseResponse = {
 
 export default function VaultSummary() {
   const user = useUserStore((state) => state.user)
+
+  useEffect(() => {
+    user?.email && fetchVaults(user.email)
+  }, [user])
 
   async function fetchVaults(email: string) {
     try {
@@ -34,9 +33,6 @@ export default function VaultSummary() {
       console.error("Error fetching vaults:", error)
     }
   }
-  useEffect(() => {
-    user?.email && fetchVaults(user.email)
-  }, [user])
 
   return (
     <div className="flex h-full flex-col items-center justify-center">
