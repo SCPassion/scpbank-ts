@@ -7,11 +7,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<DashboardLayout />}>
+          <Route path="/" element={<h1>hello</h1>} />
+          <Route path="savings" element={<DashboardLayout />}>
             <Route index element={<h1>Home</h1>} />
-            <Route path="/create" element={<CreateVault />} />
+            <Route path="create" element={<CreateVault />} />
           </Route>
-          <Route path="savings" element={<h1>Savings</h1>} />
           <Route
             path="interest"
             element={<h1>Compound Interest Calculator</h1>}
