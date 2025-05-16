@@ -5,7 +5,7 @@ import type { PostgrestError, User } from "@supabase/supabase-js"
 import { useNavigate } from "react-router"
 
 export default function CreateVault() {
-  const { user } = useUserStore()
+  const user = useUserStore((state) => state.user)
   const navigate = useNavigate()
   const id = useId()
 

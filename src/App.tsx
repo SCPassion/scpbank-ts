@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router"
 import MainLayout from "./layouts/MainLayout"
 import DashboardLayout from "./layouts/DashboardLayout"
 import CreateVault from "./pages/CreateVault"
+import VaultSummary from "./pages/VaultSummary"
+
 function App() {
   return (
     <BrowserRouter>
@@ -9,7 +11,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<h1>hello</h1>} />
           <Route path="savings" element={<DashboardLayout />}>
-            <Route index element={<h1>Home</h1>} />
+            <Route index element={<VaultSummary />} />
             <Route path="create" element={<CreateVault />} />
           </Route>
           <Route
