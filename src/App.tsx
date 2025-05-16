@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router"
 import MainLayout from "./layouts/MainLayout"
 import DashboardLayout from "./layouts/DashboardLayout"
-import CreateVault from "./pages/CreateVault"
-import VaultSummary from "./pages/VaultSummary"
+import CreateVault from "./pages/Saving/CreateVault"
+import VaultSummary from "./pages/Saving/VaultSummary"
 
 function App() {
   return (
