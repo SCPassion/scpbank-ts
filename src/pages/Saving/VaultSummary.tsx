@@ -1,14 +1,8 @@
 import { useUserStore, useVaultStore } from "@/store/store"
 import { supabase } from "@/supabase-client"
-import type { PostgrestError } from "@supabase/supabase-js"
 import { useEffect } from "react"
-import { type Vault } from "@/lib/types"
+import { type SupabaseResponse } from "@/lib/types"
 import VaultTable from "./VaultTable"
-
-type SupabaseResponse = {
-  data: Vault[] | null
-  error: PostgrestError | null
-}
 
 export default function VaultSummary() {
   const user = useUserStore((state) => state.user)
