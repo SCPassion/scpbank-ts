@@ -9,7 +9,7 @@ export default function DeleteVault() {
   const user = useUserStore((state) => state.user)
   const vaults = useVaultStore((state) => state.vaults)
 
-  // This is a function to delete a vault from the database
+  // This function demonstrates how to delete a row in the vaults table
   async function deleteVault(vaultId: number) {
     if (!user) {
       console.error("User is not logged in")

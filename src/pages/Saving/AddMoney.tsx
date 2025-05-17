@@ -9,6 +9,7 @@ export default function AddMoney() {
   const user = useUserStore((state) => state.user)
   const vaults = useVaultStore((state) => state.vaults)
 
+  // This function demonstrates how to update a row in the vaults table
   async function addMoneyToVault(vaultId: number, amount: number) {
     if (!user) {
       console.error("User is not logged in")

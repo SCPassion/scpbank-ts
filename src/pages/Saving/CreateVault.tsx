@@ -9,6 +9,7 @@ export default function CreateVault() {
   const navigate = useNavigate()
   const id = useId()
 
+  // This function demonstrates how to add a row in the vaults table
   async function createVault(
     user: User,
     goalName: string,
