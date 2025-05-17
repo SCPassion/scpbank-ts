@@ -45,6 +45,12 @@ export default function DeleteVault() {
   return (
     <div className="flex flex-col items-center justify-center gap-12 px-8 py-8">
       <h2 className="font-bol text-4xl">Delete Vault</h2>
+      <p>
+        Target can be set incorrectly, and you don't have to blame yourself for
+        that. You can delete a vault if you want to start over or if you no
+        longer need it. Deleting a vault will remove all your progress and
+        information related to that vault.
+      </p>
 
       <form
         className="hover:border-lime-00 flex flex-col items-center justify-center gap-6 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"

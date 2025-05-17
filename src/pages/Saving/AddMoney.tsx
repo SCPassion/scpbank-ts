@@ -63,6 +63,10 @@ export default function AddMoney() {
       <h2 className="font-bol text-4xl">
         Pick up your vault and add money now!
       </h2>
+      <p>
+        You can add money to your vault at any time. This is a great way to
+        increase your savings and reach your goals faster.
+      </p>
 
       <form
         className="hover:border-lime-00 flex flex-col items-center justify-center gap-6 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
