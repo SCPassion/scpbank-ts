@@ -3,7 +3,7 @@ import MainLayout from "./layouts/MainLayout"
 import DashboardLayout from "./layouts/DashboardLayout"
 import CreateVault from "./pages/Saving/CreateVault"
 import VaultSummary from "./pages/Saving/VaultSummary"
-
+import DeleteVault from "./pages/Saving/DeleteVault"
 function App() {
   return (
     <BrowserRouter>
@@ -13,6 +13,7 @@ function App() {
           <Route path="savings" element={<DashboardLayout />}>
             <Route index element={<VaultSummary />} />
             <Route path="create" element={<CreateVault />} />
+            <Route path="delete" element={<DeleteVault />} />
           </Route>
           <Route
             path="interest"

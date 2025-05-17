@@ -25,6 +25,16 @@ export default function DashboardLayout() {
               Create Vault
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="delete"
+              className={({ isActive }) =>
+                isActive ? "text-3xl underline" : ""
+              }
+            >
+              Delete Vault
+            </NavLink>
+          </li>
         </ul>
       </nav>
       <Outlet />
