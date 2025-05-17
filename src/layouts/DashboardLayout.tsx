@@ -41,6 +41,18 @@ export default function DashboardLayout() {
               Delete Vault
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="add"
+              className={({ isActive }) =>
+                isActive
+                  ? "rounded-full bg-green-100 px-8 py-6 text-3xl underline"
+                  : "transition-all duration-300 hover:scale-105 hover:text-3xl"
+              }
+            >
+              Add money
+            </NavLink>
+          </li>
         </ul>
       </nav>
       <Outlet />
