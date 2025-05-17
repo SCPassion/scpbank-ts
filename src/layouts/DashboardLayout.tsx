@@ -8,7 +8,9 @@ export default function DashboardLayout() {
             <NavLink
               to="."
               className={({ isActive }) =>
-                isActive ? "text-3xl underline" : ""
+                isActive
+                  ? "rounded-full bg-green-100 px-8 py-6 text-3xl underline"
+                  : "transition-all duration-300 hover:scale-105 hover:text-3xl"
               }
               end
             >
@@ -19,7 +21,9 @@ export default function DashboardLayout() {
             <NavLink
               to="create"
               className={({ isActive }) =>
-                isActive ? "text-3xl underline" : ""
+                isActive
+                  ? "rounded-full bg-green-100 px-8 py-6 text-3xl underline"
+                  : "transition-all duration-300 hover:scale-105 hover:text-3xl"
               }
             >
               Create Vault
@@ -29,7 +33,9 @@ export default function DashboardLayout() {
             <NavLink
               to="delete"
               className={({ isActive }) =>
-                isActive ? "text-3xl underline" : ""
+                isActive
+                  ? "rounded-full bg-green-100 px-8 py-6 text-3xl underline"
+                  : "transition-all duration-300 hover:scale-105 hover:text-3xl"
               }
             >
               Delete Vault
