@@ -50,7 +50,7 @@ export default function DashboardLayout() {
                   : "transition-all duration-300 hover:scale-105 hover:text-3xl"
               }
             >
-              Add money
+              Add Money
             </NavLink>
           </li>
         </ul>
