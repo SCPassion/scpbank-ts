@@ -1,34 +1,13 @@
 import { useId } from "react"
 import { useUserStore, useVaultStore } from "@/store/store"
-import { supabase } from "@/supabase-client"
 import { useNavigate } from "react-router"
+import { deleteVault } from "@/functions/vaultOperations"
 
 export default function DeleteVault() {
   const id = useId()
   const navigate = useNavigate()
   const user = useUserStore((state) => state.user)
   const vaults = useVaultStore((state) => state.vaults)
-
-  // This function demonstrates how to delete a row in the vaults table
-  async function deleteVault(vaultId: number) {
-    if (!user) {
-      console.error("User is not logged in")
-      return
-    }
-    const { error } = await supabase
-      .from("vaults")
-      .delete()
-      .eq("id", vaultId)
-      .eq("user_email", user.email)
-
-    if (error) {
-      console.error("Error deleting vault:", error.message)
-      return
-    }
-
-    console.log("Vault deleted successfully")
-    navigate("..", { replace: true })
-  }
 
   function handleForm(formData: FormData) {
     const vaultId = formData.get("vault")
@@ -40,7 +19,8 @@ export default function DeleteVault() {
       }
     }
     console.log("Vault ID to delete:", vaultId)
-    deleteVault(Number(vaultId))
+    deleteVault(user, Number(vaultId))
+    navigate("..", { replace: true })
   }
   return (
     <div className="flex flex-col items-center justify-center gap-12 px-8 py-8">
