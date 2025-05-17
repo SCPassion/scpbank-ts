@@ -10,6 +10,7 @@ export default function DashboardLayout() {
               className={({ isActive }) =>
                 isActive ? "text-3xl underline" : ""
               }
+              end
             >
               Dashboard
             </NavLink>

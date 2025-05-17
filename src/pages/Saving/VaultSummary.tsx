@@ -1,6 +1,6 @@
 import { useUserStore, useVaultStore } from "@/store/store"
 import { supabase } from "@/supabase-client"
-import type { PostgrestError, User } from "@supabase/supabase-js"
+import type { PostgrestError } from "@supabase/supabase-js"
 import { useEffect } from "react"
 import { type Vault } from "@/lib/types"
 import VaultTable from "./VaultTable"
@@ -12,10 +12,38 @@ type SupabaseResponse = {
 
 export default function VaultSummary() {
   const user = useUserStore((state) => state.user)
-  const { vaults, setVaults } = useVaultStore()
+  const { vaults, setVaults, addVault } = useVaultStore()
 
   useEffect(() => {
     user?.email && fetchVaults(user.email)
+
+    if (user?.email === undefined) {
+      console.log("User email is undefined")
+      return
+    }
+    // subscribe to changes in the vaults table
+    const subscription = supabase
+      .channel("vault-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "vaults",
+          filter: `user_email=eq.${user?.email}`,
+        },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            console.log("New vault added:", payload.new)
+            const newVault = payload.new as Vault
+            addVault(newVault)
+          }
+        },
+      )
+      .subscribe()
+    return () => {
+      supabase.removeChannel(subscription)
+    }
   }, [user])
 
   async function fetchVaults(email: string) {

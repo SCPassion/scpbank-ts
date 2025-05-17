@@ -1,11 +1,7 @@
 import { Link } from "react-router"
 import Navigations from "./Navigations"
 import { supabase } from "@/supabase-client"
-import {
-  type AuthResponse,
-  type User,
-  type PostgrestError,
-} from "@supabase/supabase-js"
+import { type AuthResponse } from "@supabase/supabase-js"
 
 import { useUserStore } from "@/store/store"
 import { useEffect } from "react"

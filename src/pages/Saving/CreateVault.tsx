@@ -40,9 +40,6 @@ export default function CreateVault() {
     const goalName = data.goalName as string
     const targetAmount = Number(data.targetAmount)
     const durationInWeeks = Number(data.durationInWeeks)
-    console.log(
-      `Goal Name: ${goalName}, Target Amount: ${targetAmount}, Duration in Weeks: ${durationInWeeks}`,
-    )
     user && createVault(user, goalName, targetAmount, durationInWeeks)
   }
 
