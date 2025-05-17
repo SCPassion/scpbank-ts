@@ -12,7 +12,7 @@ type SupabaseResponse = {
 
 export default function VaultSummary() {
   const user = useUserStore((state) => state.user)
-  const { vaults, setVaults, addVault } = useVaultStore()
+  const { vaults, setVaults } = useVaultStore()
 
   useEffect(() => {
     user?.email && fetchVaults(user.email)
@@ -20,29 +20,6 @@ export default function VaultSummary() {
     if (user?.email === undefined) {
       console.log("User email is undefined")
       return
-    }
-    // subscribe to changes in the vaults table
-    const subscription = supabase
-      .channel("vault-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "vaults",
-          filter: `user_email=eq.${user?.email}`,
-        },
-        (payload) => {
-          if (payload.eventType === "INSERT") {
-            console.log("New vault added:", payload.new)
-            const newVault = payload.new as Vault
-            addVault(newVault)
-          }
-        },
-      )
-      .subscribe()
-    return () => {
-      supabase.removeChannel(subscription)
     }
   }, [user])
 
