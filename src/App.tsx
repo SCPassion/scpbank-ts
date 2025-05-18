@@ -7,6 +7,8 @@ import DeleteVault from "./pages/Saving/DeleteVault"
 import AddMoney from "./pages/Saving/AddMoney"
 import InternalLink from "@/components/link/InternalLink"
 import InformationGather from "./pages/Interest/InformationGather"
+import InterestBreakDown from "./pages/Interest/InterestBreakDown"
+
 function App() {
   return (
     <BrowserRouter>
@@ -39,7 +41,7 @@ function App() {
             }
           >
             <Route index element={<InformationGather />} />
-            <Route path="breakdown" element={<h1>Result</h1>} />
+            <Route path="breakdown" element={<InterestBreakDown />} />
           </Route>
           <Route path="budget" element={<h1>Budget Planner</h1>} />
           <Route path="retire" element={<h1>Retirement Saving Planner</h1>} />
