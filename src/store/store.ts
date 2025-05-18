@@ -27,9 +27,12 @@ export const useVaultStore = create<VaultStore>((set) => ({
 type BreakdownStore = {
   breakDowns: Breakdown[]
   setBreakDowns: (breakdowns: Breakdown[]) => void
+  addBreakDown: (breakdown: Breakdown) => void
 }
 
 export const useBreakdownStore = create<BreakdownStore>((set) => ({
   breakDowns: [],
   setBreakDowns: (breakdowns) => set({ breakDowns: breakdowns }),
+  addBreakDown: (breakdown) =>
+    set((state) => ({ breakDowns: [...state.breakDowns, breakdown] })),
 }))
