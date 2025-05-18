@@ -5,13 +5,25 @@ import CreateVault from "./pages/Saving/CreateVault"
 import VaultSummary from "./pages/Saving/VaultSummary"
 import DeleteVault from "./pages/Saving/DeleteVault"
 import AddMoney from "./pages/Saving/AddMoney"
+import InternalLink from "@/components/link/InternalLink"
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<h1>hello</h1>} />
-          <Route path="savings" element={<DashboardLayout />}>
+          <Route
+            path="savings"
+            element={
+              <DashboardLayout>
+                <InternalLink to=".">Dashboard</InternalLink>
+                <InternalLink to="create">Create Vault</InternalLink>
+                <InternalLink to="delete">Delete Vault</InternalLink>
+                <InternalLink to="add">Add Money</InternalLink>
+              </DashboardLayout>
+            }
+          >
             <Route index element={<VaultSummary />} />
             <Route path="create" element={<CreateVault />} />
             <Route path="delete" element={<DeleteVault />} />
