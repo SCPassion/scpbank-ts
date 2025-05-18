@@ -1,21 +1,98 @@
-import { useId } from "react"
+import { useState, useId } from "react"
 
+type calculateYearlyBreakdownProps = {
+  principal: number
+  rate: number
+  years: number
+  contribution: number // monthly contribution
+}
 export default function InformationGather() {
+  const [error, setError] = useState<string>("")
+
   const id = useId()
+
+  function calculateYearlyBreakdown({
+    principal,
+    rate,
+    years,
+    contribution, // monthly contribution
+  }: calculateYearlyBreakdownProps) {
+    const r = rate / 100
+    const n = 12
+    const result = []
+
+    for (let year = 1; year <= years; year++) {
+      const compoundFactor = Math.pow(1 + r / n, n * year)
+      const futureValue = principal * compoundFactor
+
+      const contributionFutureValue =
+        contribution > 0 ? contribution * ((compoundFactor - 1) / (r / n)) : 0
+
+      const total = futureValue + contributionFutureValue
+
+      result.push({
+        year,
+        total: parseFloat(total.toFixed(2)),
+        principal: parseFloat(futureValue.toFixed(2)),
+        contribution: parseFloat(contributionFutureValue.toFixed(2)),
+        interest: parseFloat(
+          (total - principal - contribution * n * year).toFixed(2),
+        ),
+      })
+    }
+
+    console.log("Yearly Breakdown:", result)
+  }
+
+  function handleFormAction(formData: FormData) {
+    const principalAmount = Number(formData.get("pa"))
+    const annualInterestRate = Number(formData.get("apr"))
+    const time = Number(formData.get("years"))
+    const contributionAmount = Number(formData.get("durationInWeeks"))
+
+    if (principalAmount <= 0 || annualInterestRate <= 0 || time <= 0) {
+      console.error("Invalid input values")
+      setError("Please enter valid positive numbers for all fields.")
+      return
+    } else {
+      if (error !== "") {
+        setError("")
+      }
+    }
+    console.log("Principal Amount:", principalAmount)
+    console.log("Annual Interest Rate:", annualInterestRate)
+    console.log("Time (Years):", time)
+    console.log("Contribution Amount (Monthly):", contributionAmount)
+
+    calculateYearlyBreakdown({
+      principal: principalAmount,
+      rate: annualInterestRate,
+      years: time,
+      contribution: contributionAmount, // monthly contribution
+    })
+  }
+
   return (
     <div className="flex flex-col items-center justify-center gap-12 px-8 py-8 text-center">
       <h2 className="font-bol text-4xl">
         Investment comes with a lot of uncertainty. <br />
         But you can make it easier!
       </h2>
-      <p>
-        You can use this tool to predict your investment growth over time. This
-        will help you make informed decisions about your investments and
-        financial goals. You can also use this tool to compare different
-        investment options and see which one is best for you.
-      </p>
 
-      <form className="hover:border-lime-00 flex flex-col items-center justify-center gap-6 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl">
+      {error ? (
+        <p className="text-red-500">{error}</p>
+      ) : (
+        <p>
+          You can use this tool to predict your investment growth over time.
+          This will help you make informed decisions about your investments and
+          financial goals. You can also use this tool to compare different
+          investment options and see which one is best for you.
+        </p>
+      )}
+      <form
+        className="hover:border-lime-00 flex flex-col items-center justify-center gap-6 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
+        action={handleFormAction}
+      >
         <h3 className="text-3xl font-bold text-lime-800">
           Set up your investment calculation now!
         </h3>
