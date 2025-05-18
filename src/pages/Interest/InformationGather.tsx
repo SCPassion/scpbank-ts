@@ -1,4 +1,7 @@
 import { useState, useId } from "react"
+import { useNavigate } from "react-router"
+import { type Breakdown } from "@/lib/types"
+import { useBreakdownStore } from "@/store/store"
 
 type calculateYearlyBreakdownProps = {
   principal: number
@@ -8,7 +11,8 @@ type calculateYearlyBreakdownProps = {
 }
 export default function InformationGather() {
   const [error, setError] = useState<string>("")
-
+  const setBreakDowns = useBreakdownStore((state) => state.setBreakDowns)
+  const navigate = useNavigate()
   const id = useId()
 
   function calculateYearlyBreakdown({
@@ -19,7 +23,7 @@ export default function InformationGather() {
   }: calculateYearlyBreakdownProps) {
     const r = rate / 100
     const n = 12
-    const result = []
+    const result: Breakdown[] = []
 
     for (let year = 1; year <= years; year++) {
       const compoundFactor = Math.pow(1 + r / n, n * year)
@@ -42,6 +46,8 @@ export default function InformationGather() {
     }
 
     console.log("Yearly Breakdown:", result)
+    setBreakDowns(result)
+    navigate("breakdown", { replace: true })
   }
 
   function handleFormAction(formData: FormData) {

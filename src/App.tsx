@@ -34,12 +34,12 @@ function App() {
             element={
               <DashboardLayout>
                 <InternalLink to=".">Setup</InternalLink>
-                <InternalLink to="result">Result</InternalLink>
+                <InternalLink to="breakdown">Break-Down</InternalLink>
               </DashboardLayout>
             }
           >
             <Route index element={<InformationGather />} />
-            <Route path="result" element={<h1>Result</h1>} />
+            <Route path="breakdown" element={<h1>Result</h1>} />
           </Route>
           <Route path="budget" element={<h1>Budget Planner</h1>} />
           <Route path="retire" element={<h1>Retirement Saving Planner</h1>} />

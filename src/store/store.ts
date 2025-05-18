@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { type User } from "@supabase/supabase-js"
-import { type Vault } from "@/lib/types"
+import { type Vault, type Breakdown } from "@/lib/types"
 
 type UserStore = {
   user: User | null
@@ -22,4 +22,14 @@ export const useVaultStore = create<VaultStore>((set) => ({
   vaults: [],
   setVaults: (vaults) => set({ vaults }),
   addVault: (vault) => set((state) => ({ vaults: [...state.vaults, vault] })),
+}))
+
+type BreakdownStore = {
+  breakDowns: Breakdown[]
+  setBreakDowns: (breakdowns: Breakdown[]) => void
+}
+
+export const useBreakdownStore = create<BreakdownStore>((set) => ({
+  breakDowns: [],
+  setBreakDowns: (breakdowns) => set({ breakDowns: breakdowns }),
 }))

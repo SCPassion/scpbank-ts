@@ -12,3 +12,11 @@ export type SupabaseResponse = {
   data: Vault[] | null
   error: PostgrestError | null
 }
+
+export type Breakdown = {
+  year: number
+  total: number
+  principal: number
+  contribution: number
+  interest: number
+}
