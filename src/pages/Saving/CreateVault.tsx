@@ -1,47 +1,22 @@
 import { useId } from "react"
 import { useUserStore } from "@/store/store"
-import { supabase } from "@/supabase-client"
-import type { PostgrestError, User } from "@supabase/supabase-js"
 import { useNavigate } from "react-router"
+import { createVault } from "@/functions/vaultOperations"
 
 export default function CreateVault() {
   const user = useUserStore((state) => state.user)
   const navigate = useNavigate()
   const id = useId()
 
-  // This function demonstrates how to add a row in the vaults table
-  async function createVault(
-    user: User,
-    goalName: string,
-    targetAmount: number,
-    durationInWeeks: number,
-  ) {
-    //Insert user data into the sale table, store the error to a new variable called insertError
-    const { error: insertError }: { error: PostgrestError | null } =
-      await supabase.from("vaults").insert({
-        user_id: user.id,
-        created_at: new Date().toISOString(),
-        user_email: user.email,
-        purpose: goalName,
-        target: targetAmount,
-        number_of_weeks: durationInWeeks,
-        saved_amount: 0,
-      })
-
-    if (insertError) {
-      console.error("Error inserting user into table:", insertError.message)
-      return
-    }
-    console.log("Vault added into table:", user.email)
-    navigate("..", { replace: true })
-  }
-
   async function formAction(loginData: FormData) {
     const data = Object.fromEntries(loginData)
     const goalName = data.goalName as string
     const targetAmount = Number(data.targetAmount)
     const durationInWeeks = Number(data.durationInWeeks)
-    user && createVault(user, goalName, targetAmount, durationInWeeks)
+    if (user) {
+      createVault(user, goalName, targetAmount, durationInWeeks)
+      navigate("..", { replace: true })
+    }
   }
 
   return (

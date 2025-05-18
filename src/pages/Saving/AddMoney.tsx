@@ -2,6 +2,7 @@ import { useId } from "react"
 import { useUserStore, useVaultStore } from "@/store/store"
 import { supabase } from "@/supabase-client"
 import { useNavigate } from "react-router"
+import { addMoneyToVault } from "@/functions/vaultOperations"
 
 export default function AddMoney() {
   const id = useId()
@@ -10,32 +11,31 @@ export default function AddMoney() {
   const vaults = useVaultStore((state) => state.vaults)
 
   // This function demonstrates how to update a row in the vaults table
-  async function addMoneyToVault(vaultId: number, amount: number) {
-    if (!user) {
-      console.error("User is not logged in")
-      return
-    }
+  // async function addMoneyToVault(vaultId: number, amount: number) {
+  //   if (!user) {
+  //     console.error("User is not logged in")
+  //     return
+  //   }
 
-    // Get the current saved amount for the vault
-    const currentSavedAmount =
-      vaults.find((vault) => vault.id === vaultId)?.saved_amount || 0
+  //   // Get the current saved amount for the vault
+  //   const currentSavedAmount =
+  //     vaults.find((vault) => vault.id === vaultId)?.saved_amount || 0
 
-    // Update the vault with the new saved amount
-    const { error } = await supabase
-      .from("vaults")
-      .update({
-        saved_amount: currentSavedAmount + amount,
-      })
-      .eq("id", vaultId)
-      .eq("user_email", user.email)
+  //   // Update the vault with the new saved amount
+  //   const { error } = await supabase
+  //     .from("vaults")
+  //     .update({
+  //       saved_amount: currentSavedAmount + amount,
+  //     })
+  //     .eq("id", vaultId)
+  //     .eq("user_email", user.email)
 
-    if (error) {
-      console.error("Error adding money to vault:", error.message)
-      return
-    }
-    console.log("Money added to vault successfully")
-    navigate("..", { replace: true })
-  }
+  //   if (error) {
+  //     console.error("Error adding money to vault:", error.message)
+  //     return
+  //   }
+  //   console.log("Money added to vault successfully")
+  // }
 
   function handleForm(formData: FormData) {
     const vaultId = formData.get("vault")
@@ -55,7 +55,10 @@ export default function AddMoney() {
     }
     console.log("Vault ID to add money:", vaultId)
     console.log("Amount to add:", amount)
-    addMoneyToVault(Number(vaultId), Number(amount))
+    if (user) {
+      addMoneyToVault(user, Number(vaultId), Number(amount), vaults)
+      navigate("..", { replace: true })
+    }
   }
 
   return (
