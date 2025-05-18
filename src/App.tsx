@@ -6,7 +6,7 @@ import VaultSummary from "./pages/Saving/VaultSummary"
 import DeleteVault from "./pages/Saving/DeleteVault"
 import AddMoney from "./pages/Saving/AddMoney"
 import InternalLink from "@/components/link/InternalLink"
-
+import InformationGather from "./pages/Interest/InformationGather"
 function App() {
   return (
     <BrowserRouter>
@@ -31,8 +31,16 @@ function App() {
           </Route>
           <Route
             path="interest"
-            element={<h1>Compound Interest Calculator</h1>}
-          />
+            element={
+              <DashboardLayout>
+                <InternalLink to=".">Setup</InternalLink>
+                <InternalLink to="result">Result</InternalLink>
+              </DashboardLayout>
+            }
+          >
+            <Route index element={<InformationGather />} />
+            <Route path="result" element={<h1>Result</h1>} />
+          </Route>
           <Route path="budget" element={<h1>Budget Planner</h1>} />
           <Route path="retire" element={<h1>Retirement Saving Planner</h1>} />
           <Route path="stock" element={<h1>Stock Market Watchlist</h1>} />
