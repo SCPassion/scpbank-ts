@@ -19,6 +19,7 @@ export type InterestRecord = {
   apr: number
   time: number
   contribute_amount: number
+  id: number
 }
 
 // This type is used to represent the response from Supabase when fetching interest records
