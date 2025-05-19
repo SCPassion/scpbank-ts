@@ -1,36 +1,16 @@
 import { InterestVisualization } from "@/components/InterestVisualization"
 import { useEffect, useId } from "react"
-import { type SupabaseInterestRecordResponse } from "@/lib/types"
 import { useUserStore, useInterestRecordsStore } from "@/store/store"
-import { supabase } from "@/supabase-client"
+import { fetchAllInterestRecords } from "@/functions/interestOperation"
 
 export default function InterestBreakDown() {
   const id = useId()
   const user = useUserStore((state) => state.user)
   const { interestRecords, setInterestRecords } = useInterestRecordsStore()
-  async function fetchAllInterestRecords() {
-    try {
-      const { data, error }: SupabaseInterestRecordResponse = await supabase
-        .from("interest")
-        .select("principal_amount, apr, time, contribute_amount, id")
-        .eq("user_email", user?.email)
 
-      if (error) {
-        throw new Error(`Error fetching interest records: ${error.message}`)
-      }
-
-      if (data) {
-        setInterestRecords(data)
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error fetching interest records:", error.message)
-      }
-    }
-  }
   useEffect(() => {
     if (user) {
-      fetchAllInterestRecords()
+      fetchAllInterestRecords(user, setInterestRecords)
     }
   }, [user])
 
