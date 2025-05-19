@@ -1,85 +1,53 @@
 import { useState, useId } from "react"
 import { useNavigate } from "react-router"
-import { type Breakdown } from "@/lib/types"
-import { useBreakdownStore, useUserStore } from "@/store/store"
-import { supabase } from "@/supabase-client"
+import { type InterestRecord } from "@/lib/types"
+import { useInterestRecordsStore, useUserStore } from "@/store/store"
+import { createSavingRecord } from "@/functions/interestOperation"
 
-type calculateYearlyBreakdownProps = {
-  principal: number
-  rate: number
-  years: number
-  contribution: number // monthly contribution
-}
 export default function InformationGather() {
   const user = useUserStore((state) => state.user)
   const [error, setError] = useState<string>("")
-  const setBreakDowns = useBreakdownStore((state) => state.setBreakDowns)
+  // const setInterestRecords = useInterestRecordsStore(
+  //   (state) => state.setInterestRecords,
+  // )
   const navigate = useNavigate()
   const id = useId()
 
-  function calculateYearlyBreakdown({
-    principal,
-    rate,
-    years,
-    contribution, // monthly contribution
-  }: calculateYearlyBreakdownProps) {
-    const r = rate / 100
-    const n = 12
-    const result: Breakdown[] = []
+  // function calculateInterestBreakdown({
+  //   principal_amount,
+  //   apr,
+  //   time,
+  //   contribute_amount, // monthly contribution
+  // }: InterestRecord) {
+  //   const r = apr / 100
+  //   const n = 12
+  //   const result: InterestRecord[] = []
 
-    for (let year = 1; year <= years; year++) {
-      const compoundFactor = Math.pow(1 + r / n, n * year)
-      const futureValue = principal * compoundFactor
+  //   for (let year = 1; year <= time; year++) {
+  //     const compoundFactor = Math.pow(1 + r / n, n * year)
+  //     const futureValue = principal_amount * compoundFactor
 
-      const contributionFutureValue =
-        contribution > 0 ? contribution * ((compoundFactor - 1) / (r / n)) : 0
+  //     const contributionFutureValue =
+  //       contribute_amount > 0
+  //         ? contribute_amount * ((compoundFactor - 1) / (r / n))
+  //         : 0
 
-      const total = futureValue + contributionFutureValue
+  //     const total = futureValue + contributionFutureValue
 
-      result.push({
-        year,
-        total: parseFloat(total.toFixed(2)),
-        principal: parseFloat(futureValue.toFixed(2)),
-        contribution: parseFloat(contributionFutureValue.toFixed(2)),
-        interest: parseFloat(
-          (total - principal - contribution * n * year).toFixed(2),
-        ),
-      })
-    }
+  //     result.push({
+  //       time: parseFloat(total.toFixed(2)),
+  //       principal_amount: parseFloat(futureValue.toFixed(2)),
+  //       contribute_amount: parseFloat(contributionFutureValue.toFixed(2)),
+  //       apr: parseFloat(
+  //         (total - principal_amount - contribute_amount * n * year).toFixed(2),
+  //       ),
+  //     })
+  //   }
 
-    console.log("Yearly Breakdown:", result)
-    setBreakDowns(result)
-    navigate("breakdown", { replace: true })
-  }
-
-  async function createSavingRecord(
-    principalAmount: number,
-    annualInterestRate: number,
-    time: number,
-    contributionAmount: number,
-  ) {
-    try {
-      if (user) {
-        const { error } = await supabase.from("interest").insert({
-          principal_amount: principalAmount,
-          apr: annualInterestRate,
-          time,
-          contribute_amount: contributionAmount,
-          user_email: user.email,
-          user_id: user.id,
-          created_at: new Date().toISOString(),
-        })
-
-        if (error) {
-          throw new Error(error.message)
-        }
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error inserting saving record:", error.message)
-      }
-    }
-  }
+  //   console.log("Yearly Breakdown:", result)
+  //   setInterestRecords(result)
+  //   navigate("breakdown", { replace: true })
+  // }
 
   function handleFormAction(formData: FormData) {
     const principalAmount = Number(formData.get("pa"))
@@ -102,17 +70,18 @@ export default function InformationGather() {
     console.log("Contribution Amount (Monthly):", contributionAmount)
 
     createSavingRecord(
+      user,
       principalAmount,
       annualInterestRate,
       time,
       contributionAmount,
     )
 
-    // calculateYearlyBreakdown({
-    //   principal: principalAmount,
-    //   rate: annualInterestRate,
-    //   years: time,
-    //   contribution: contributionAmount, // monthly contribution
+    // calculateInterestBreakdown({
+    //   principal_amount: principalAmount,
+    //   apr: annualInterestRate,
+    //   time: time,
+    //   contribute_amount: contributionAmount, // monthly contribution
     // })
   }
 
@@ -206,7 +175,7 @@ export default function InformationGather() {
         </div>
 
         <button className="cursor-pointer rounded-full bg-lime-800 px-7 py-4 font-bold text-white opacity-50 shadow-lg transition-all duration-300 hover:opacity-100">
-          Predict your investment growth now!
+          Save your prediction now!
         </button>
       </form>
       <p>Note: Interest are default to compound monthly</p>

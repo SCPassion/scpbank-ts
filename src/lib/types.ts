@@ -8,15 +8,21 @@ export type Vault = {
   saved_amount: number
 }
 
+// This type is used to represent the response from Supabase when fetching vaults
 export type SupabaseResponse = {
   data: Vault[] | null
   error: PostgrestError | null
 }
 
-export type Breakdown = {
-  year: number
-  total: number
-  principal: number
-  contribution: number
-  interest: number
+export type InterestRecord = {
+  principal_amount: number
+  apr: number
+  time: number
+  contribute_amount: number
+}
+
+// This type is used to represent the response from Supabase when fetching interest records
+export type SupabaseInterestRecordResponse = {
+  data: InterestRecord[] | null
+  error: Error | null
 }
