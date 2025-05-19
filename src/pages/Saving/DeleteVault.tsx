@@ -1,13 +1,22 @@
-import { useId } from "react"
+import { useEffect, useId } from "react"
 import { useUserStore, useVaultStore } from "@/store/store"
 import { useNavigate } from "react-router"
-import { deleteVault } from "@/functions/vaultOperations"
+import { deleteVault, fetchVaults } from "@/functions/vaultOperations"
 
 export default function DeleteVault() {
   const id = useId()
   const navigate = useNavigate()
   const user = useUserStore((state) => state.user)
-  const vaults = useVaultStore((state) => state.vaults)
+  const { vaults, setVaults } = useVaultStore()
+
+  useEffect(() => {
+    user?.email && fetchVaults({ email: user.email, setVaults })
+
+    if (user?.email === undefined) {
+      console.log("User email is undefined")
+      return
+    }
+  }, [user])
 
   function handleForm(formData: FormData) {
     const vaultId = formData.get("vault")
