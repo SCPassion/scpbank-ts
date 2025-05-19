@@ -1,7 +1,8 @@
 import { useState, useId } from "react"
 import { useNavigate } from "react-router"
 import { type Breakdown } from "@/lib/types"
-import { useBreakdownStore } from "@/store/store"
+import { useBreakdownStore, useUserStore } from "@/store/store"
+import { supabase } from "@/supabase-client"
 
 type calculateYearlyBreakdownProps = {
   principal: number
@@ -10,6 +11,7 @@ type calculateYearlyBreakdownProps = {
   contribution: number // monthly contribution
 }
 export default function InformationGather() {
+  const user = useUserStore((state) => state.user)
   const [error, setError] = useState<string>("")
   const setBreakDowns = useBreakdownStore((state) => state.setBreakDowns)
   const navigate = useNavigate()
@@ -50,6 +52,35 @@ export default function InformationGather() {
     navigate("breakdown", { replace: true })
   }
 
+  async function createSavingRecord(
+    principalAmount: number,
+    annualInterestRate: number,
+    time: number,
+    contributionAmount: number,
+  ) {
+    try {
+      if (user) {
+        const { error } = await supabase.from("interest").insert({
+          principal_amount: principalAmount,
+          apr: annualInterestRate,
+          time,
+          contribute_amount: contributionAmount,
+          user_email: user.email,
+          user_id: user.id,
+          created_at: new Date().toISOString(),
+        })
+
+        if (error) {
+          throw new Error(error.message)
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error inserting saving record:", error.message)
+      }
+    }
+  }
+
   function handleFormAction(formData: FormData) {
     const principalAmount = Number(formData.get("pa"))
     const annualInterestRate = Number(formData.get("apr"))
@@ -70,12 +101,19 @@ export default function InformationGather() {
     console.log("Time (Years):", time)
     console.log("Contribution Amount (Monthly):", contributionAmount)
 
-    calculateYearlyBreakdown({
-      principal: principalAmount,
-      rate: annualInterestRate,
-      years: time,
-      contribution: contributionAmount, // monthly contribution
-    })
+    createSavingRecord(
+      principalAmount,
+      annualInterestRate,
+      time,
+      contributionAmount,
+    )
+
+    // calculateYearlyBreakdown({
+    //   principal: principalAmount,
+    //   rate: annualInterestRate,
+    //   years: time,
+    //   contribution: contributionAmount, // monthly contribution
+    // })
   }
 
   return (
