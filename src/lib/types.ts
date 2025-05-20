@@ -35,3 +35,9 @@ export type SupabaseInterestRecordResponse = {
   data: InterestRecord[] | null
   error: Error | null
 }
+
+// This type is used for calculating future savings
+export type FutureSaving = {
+  age: number
+  total: number
+}

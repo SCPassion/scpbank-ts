@@ -1,6 +1,11 @@
 import React from "react"
+import { type FutureSaving } from "@/lib/types"
 
 export default function RetirementSave() {
+  const [futureSavings, setFutureSavings] = React.useState<
+    FutureSaving[] | null
+  >(null)
+
   const id = React.useId()
   function handleFormAction(formData: FormData) {
     const age = Number(formData.get("age"))
@@ -12,12 +17,8 @@ export default function RetirementSave() {
       return
     }
 
-    console.log("Age:", age)
-    console.log("Monthly Investment Amount:", monthlyInvest)
-    console.log("Expected Annual Interest Rate:", apr)
-
     // Perform calculations and navigate to the results page
-    console.log(calculateSavings(age, monthlyInvest, apr))
+    setFutureSavings(calculateSavings(age, monthlyInvest, apr))
   }
 
   function calculateSavings(
@@ -31,7 +32,7 @@ export default function RetirementSave() {
       Math.round(currentAge + (i + 1) * step),
     )
     const monthlyRate = annualInterestRate / 12
-    const results = []
+    const results: FutureSaving[] = []
 
     for (let targetAge of targetAges) {
       const yearsToTarget = targetAge - currentAge
@@ -66,7 +67,7 @@ export default function RetirementSave() {
         consistent growth. <br />
         It’s your retirement forecast!
       </p>
-      <section>
+      <section className="flex justify-center gap-8">
         <form
           className="hover:border-lime-00 flex w-100 flex-col items-center justify-center gap-6 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
           action={handleFormAction}
@@ -115,6 +116,27 @@ export default function RetirementSave() {
             Submit!
           </button>
         </form>
+        {futureSavings && (
+          <div className="mt-8 space-y-8">
+            <h3 className="text-2xl font-bold text-lime-700">
+              Your Future Savings are Projected at:
+            </h3>
+            <ul className="list-inside list-disc space-y-4">
+              {futureSavings.map((saving) => (
+                <li key={saving.age} className="text-xl">
+                  At{" "}
+                  <span className="text-2xl font-semibold">
+                    age {saving.age}
+                  </span>
+                  , you will have:{" "}
+                  <span className="text-2xl font-semibold">
+                    ${saving.total}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
     </div>
   )
