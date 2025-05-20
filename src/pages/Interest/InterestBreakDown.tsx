@@ -79,13 +79,12 @@ export default function InterestBreakDown() {
   }
   return (
     <div className="flex flex-col items-center gap-8 px-20 py-4">
-      <h1 className="text-4xl font-bold">Select your prediction plan!</h1>
       <form
-        className="flex flex-col items-center justify-center gap-6 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
+        className="mt-4 flex flex-col items-center justify-center gap-6 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
         action={formAction}
       >
         <h3 className="text-3xl font-bold text-lime-800">
-          Set up your investment calculation now!
+          Select your prediction plan now!
         </h3>
         <select
           name="interestRecord"
@@ -94,7 +93,7 @@ export default function InterestBreakDown() {
           defaultValue={-1}
           required
         >
-          <option value={-1}>-- Select a vault to delete --</option>
+          <option value={-1}>-- Select a plan --</option>
           {interestRecords.map((interestRecord) => (
             <option key={interestRecord.id} value={interestRecord.id}>
               {interestRecord.principal_amount} USD principal amount,{" "}
