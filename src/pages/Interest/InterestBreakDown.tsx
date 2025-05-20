@@ -98,7 +98,7 @@ export default function InterestBreakDown() {
           {interestRecords.map((interestRecord) => (
             <option key={interestRecord.id} value={interestRecord.id}>
               {interestRecord.principal_amount} USD principal amount,{" "}
-              {interestRecord.apr}% APR, {interestRecord.time} years,
+              {interestRecord.apr}% APR, {interestRecord.time} years,{" "}
               {interestRecord.contribute_amount} USD monthly contribution
             </option>
           ))}

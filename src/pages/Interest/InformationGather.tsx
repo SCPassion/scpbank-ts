@@ -1,8 +1,10 @@
 import { useState, useId } from "react"
+import { useNavigate } from "react-router"
 import { useUserStore } from "@/store/store"
 import { createSavingRecord } from "@/functions/interestOperation"
 
 export default function InformationGather() {
+  const navigate = useNavigate()
   const user = useUserStore((state) => state.user)
   const [error, setError] = useState<string>("")
   const id = useId()
@@ -34,6 +36,8 @@ export default function InformationGather() {
       time,
       contributionAmount,
     )
+
+    navigate("breakdown", { replace: true })
   }
 
   return (
