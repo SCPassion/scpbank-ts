@@ -25,7 +25,11 @@ export default function RetirementSave() {
     monthlyContribution: number,
     annualInterestRate: number = 0.05,
   ) {
-    const targetAges = [20, 30, 40, 50, 60]
+    const maxAge = 65
+    const step = (maxAge - currentAge) / 4
+    const targetAges = Array.from({ length: 4 }, (_, i) =>
+      Math.round(currentAge + (i + 1) * step),
+    )
     const monthlyRate = annualInterestRate / 12
     const results = []
 
