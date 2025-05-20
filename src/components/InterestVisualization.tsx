@@ -1,7 +1,4 @@
-"use client"
-
-import { TrendingUp } from "lucide-react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { type InterestBreakDown } from "@/lib/types"
 import {
   Card,
@@ -33,7 +30,7 @@ export function InterestVisualization({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Investment return</CardTitle>
+        <CardTitle>{chartData.length}-year Investment return</CardTitle>
         <CardDescription>
           Showing your investment growth over time. <br />
         </CardDescription>
@@ -44,17 +41,37 @@ export function InterestVisualization({
             accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
               right: 12,
+              bottom: 20, // add space for x label
+              top: 20, // add space for y label
             }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="year"
+              dataKey="time"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(time) => `${time}`}
+              label={{
+                value: "Year(s) later",
+                position: "insideBottom",
+                offset: -10,
+              }}
+            />
+            <YAxis
+              type="number"
+              domain={["auto", "auto"]}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              label={{
+                value: "Amount ($)",
+                angle: -90,
+                position: "insideLeft",
+                offset: 10,
+                style: { textAnchor: "middle" },
+              }}
             />
             <ChartTooltip
               cursor={false}
