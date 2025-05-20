@@ -1,53 +1,11 @@
 import { useState, useId } from "react"
-import { useNavigate } from "react-router"
-import { type InterestRecord } from "@/lib/types"
-import { useInterestRecordsStore, useUserStore } from "@/store/store"
+import { useUserStore } from "@/store/store"
 import { createSavingRecord } from "@/functions/interestOperation"
 
 export default function InformationGather() {
   const user = useUserStore((state) => state.user)
   const [error, setError] = useState<string>("")
-  // const setInterestRecords = useInterestRecordsStore(
-  //   (state) => state.setInterestRecords,
-  // )
-  const navigate = useNavigate()
   const id = useId()
-
-  // function calculateInterestBreakdown({
-  //   principal_amount,
-  //   apr,
-  //   time,
-  //   contribute_amount, // monthly contribution
-  // }: InterestRecord) {
-  //   const r = apr / 100
-  //   const n = 12
-  //   const result: InterestRecord[] = []
-
-  //   for (let year = 1; year <= time; year++) {
-  //     const compoundFactor = Math.pow(1 + r / n, n * year)
-  //     const futureValue = principal_amount * compoundFactor
-
-  //     const contributionFutureValue =
-  //       contribute_amount > 0
-  //         ? contribute_amount * ((compoundFactor - 1) / (r / n))
-  //         : 0
-
-  //     const total = futureValue + contributionFutureValue
-
-  //     result.push({
-  //       time: parseFloat(total.toFixed(2)),
-  //       principal_amount: parseFloat(futureValue.toFixed(2)),
-  //       contribute_amount: parseFloat(contributionFutureValue.toFixed(2)),
-  //       apr: parseFloat(
-  //         (total - principal_amount - contribute_amount * n * year).toFixed(2),
-  //       ),
-  //     })
-  //   }
-
-  //   console.log("Yearly Breakdown:", result)
-  //   setInterestRecords(result)
-  //   navigate("breakdown", { replace: true })
-  // }
 
   function handleFormAction(formData: FormData) {
     const principalAmount = Number(formData.get("pa"))
@@ -76,13 +34,6 @@ export default function InformationGather() {
       time,
       contributionAmount,
     )
-
-    // calculateInterestBreakdown({
-    //   principal_amount: principalAmount,
-    //   apr: annualInterestRate,
-    //   time: time,
-    //   contribute_amount: contributionAmount, // monthly contribution
-    // })
   }
 
   return (

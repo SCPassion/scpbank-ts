@@ -22,6 +22,14 @@ export type InterestRecord = {
   id: number
 }
 
+export type InterestBreakDown = {
+  time: number
+  total: number
+  principal_amount: number
+  contribute_amount: number
+  apr: number
+}
+
 // This type is used to represent the response from Supabase when fetching interest records
 export type SupabaseInterestRecordResponse = {
   data: InterestRecord[] | null

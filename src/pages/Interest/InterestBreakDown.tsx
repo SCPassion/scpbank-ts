@@ -2,6 +2,7 @@ import { InterestVisualization } from "@/components/InterestVisualization"
 import { useEffect, useId } from "react"
 import { useUserStore, useInterestRecordsStore } from "@/store/store"
 import { fetchAllInterestRecords } from "@/functions/interestOperation"
+import { type InterestBreakDown } from "@/lib/types"
 
 export default function InterestBreakDown() {
   const id = useId()
@@ -13,6 +14,45 @@ export default function InterestBreakDown() {
       fetchAllInterestRecords(user, setInterestRecords)
     }
   }, [user])
+
+  function calculateInterestBreakdown({
+    principal_amount,
+    apr,
+    time,
+    contribute_amount, // monthly contribution
+  }: Omit<InterestBreakDown, "total">) {
+    const r = apr / 100
+    const n = 12
+    const result: InterestBreakDown[] = []
+
+    for (let year = 1; year <= time; year++) {
+      const compoundFactor = Math.pow(1 + r / n, n * year)
+      const futureValue = principal_amount * compoundFactor
+
+      const contributionFutureValue =
+        contribute_amount > 0
+          ? contribute_amount * ((compoundFactor - 1) / (r / n))
+          : 0
+
+      const total = futureValue + contributionFutureValue
+
+      result.push({
+        time: year,
+        total: parseFloat(total.toFixed(2)),
+        principal_amount: parseFloat(futureValue.toFixed(2)),
+        contribute_amount: parseFloat(contributionFutureValue.toFixed(2)),
+        apr: parseFloat(
+          (total - (principal_amount + contribute_amount * n * year)).toFixed(
+            2,
+          ),
+        ),
+      })
+
+      console.log(result)
+    }
+
+    console.log("Yearly Breakdown:", result)
+  }
 
   function formAction(formData: FormData) {
     const interestRecordId = formData.get("interestRecord")
@@ -27,6 +67,16 @@ export default function InterestBreakDown() {
       )
 
       console.log(interestRecord)
+      if (interestRecord) {
+        calculateInterestBreakdown({
+          principal_amount: interestRecord.principal_amount,
+          apr: interestRecord.apr,
+          time: interestRecord.time,
+          contribute_amount: interestRecord.contribute_amount, // monthly contribution
+        })
+      } else {
+        console.error("Interest record not found")
+      }
     }
   }
   return (
