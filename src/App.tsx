@@ -8,7 +8,7 @@ import AddMoney from "./pages/Saving/AddMoney"
 import InternalLink from "@/components/link/InternalLink"
 import InformationGather from "./pages/Interest/InformationGather"
 import InterestBreakDown from "./pages/Interest/InterestBreakDown"
-
+import RetirementSave from "./pages/RetirementSaving/RetirementSave"
 function App() {
   return (
     <BrowserRouter>
@@ -44,7 +44,7 @@ function App() {
             <Route path="breakdown" element={<InterestBreakDown />} />
           </Route>
           <Route path="budget" element={<h1>Budget Planner</h1>} />
-          <Route path="retire" element={<h1>Retirement Saving Planner</h1>} />
+          <Route path="retire" element={<RetirementSave />} />
           <Route path="stock" element={<h1>Stock Market Watchlist</h1>} />
           <Route path="investment" element={<h1>Invest Risk Simulator</h1>} />
         </Route>
