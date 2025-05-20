@@ -1,5 +1,5 @@
 import { InterestVisualization } from "@/components/InterestVisualization"
-import { useEffect, useId } from "react"
+import { useEffect, useId, useState } from "react"
 import { useUserStore, useInterestRecordsStore } from "@/store/store"
 import { fetchAllInterestRecords } from "@/functions/interestOperation"
 import { type InterestBreakDown } from "@/lib/types"
@@ -8,7 +8,7 @@ export default function InterestBreakDown() {
   const id = useId()
   const user = useUserStore((state) => state.user)
   const { interestRecords, setInterestRecords } = useInterestRecordsStore()
-
+  const [chartData, setChartData] = useState<InterestBreakDown[] | null>(null)
   useEffect(() => {
     if (user) {
       fetchAllInterestRecords(user, setInterestRecords)
@@ -47,11 +47,10 @@ export default function InterestBreakDown() {
           ),
         ),
       })
-
-      console.log(result)
     }
 
     console.log("Yearly Breakdown:", result)
+    setChartData(result)
   }
 
   function formAction(formData: FormData) {
@@ -66,7 +65,6 @@ export default function InterestBreakDown() {
         (record) => record.id === Number(interestRecordId),
       )
 
-      console.log(interestRecord)
       if (interestRecord) {
         calculateInterestBreakdown({
           principal_amount: interestRecord.principal_amount,
@@ -108,7 +106,7 @@ export default function InterestBreakDown() {
         <button className="cursor-pointer rounded-full bg-lime-800 px-7 py-4 font-bold text-white opacity-50 shadow-lg transition-all duration-300 hover:opacity-100">
           Predict your investment now!
         </button>
-        <InterestVisualization />
+        {chartData && <InterestVisualization chartData={chartData} />}
       </form>
     </div>
   )

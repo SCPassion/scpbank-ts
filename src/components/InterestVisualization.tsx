@@ -1,7 +1,8 @@
 "use client"
 
-import { Bar, BarChart, XAxis, YAxis } from "recharts"
-
+import { TrendingUp } from "lucide-react"
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { type InterestBreakDown } from "@/lib/types"
 import {
   Card,
   CardContent,
@@ -17,60 +18,65 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-]
-
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+  total: {
+    label: "total",
+    color: "#056400",
   },
 } satisfies ChartConfig
 
-export function InterestVisualization() {
+export function InterestVisualization({
+  chartData,
+}: {
+  chartData: InterestBreakDown[]
+}) {
   return (
-    <Card className="h-full w-full max-w-2xl">
+    <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Horizontal</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Investment return</CardTitle>
+        <CardDescription>
+          Showing your investment growth over time. <br />
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart
+          <AreaChart
             accessibilityLayer
             data={chartData}
-            layout="vertical"
             margin={{
-              left: -20,
+              left: 12,
+              right: 12,
             }}
           >
-            <XAxis type="number" dataKey="desktop" hide />
-            <YAxis
-              dataKey="month"
-              type="category"
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="year"
               tickLine={false}
-              tickMargin={10}
               axisLine={false}
+              tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={<ChartTooltipContent indicator="line" />}
             />
-            <Bar dataKey="desktop" fill="#006000" radius={5} />
-          </BarChart>
+            <Area
+              dataKey="total"
+              type="natural"
+              fill="#006400"
+              fillOpacity={0.4}
+              stroke="#005400"
+            />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="text-muted-foreground leading-none">
-          This is not financial advice. This is a simulation of how much money
-          you can make with a certain amount of money.
+      <CardFooter>
+        <div className="flex w-full items-start gap-2 text-sm">
+          <div className="grid gap-2">
+            <div className="flex items-center gap-2 leading-none font-medium">
+              Note: Prediction is not guaranteed. Not for fiancial advice.
+            </div>
+          </div>
         </div>
       </CardFooter>
     </Card>
