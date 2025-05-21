@@ -46,7 +46,7 @@ export default function AddStock() {
 
   async function fetchStockSymbols() {
     const response = await fetch(
-      "https://finnhub.io/api/v1/stock/symbol?exchange=US&token=d0n2c69r01qmjqmk8v00d0n2c69r01qmjqmk8v0g",
+      `https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${import.meta.env.VITE_FINNHUB_API_KEY}`,
     )
 
     if (!response.ok) {
