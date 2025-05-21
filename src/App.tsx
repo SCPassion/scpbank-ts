@@ -9,6 +9,10 @@ import InternalLink from "@/components/link/InternalLink"
 import InformationGather from "./pages/Interest/InformationGather"
 import InterestBreakDown from "./pages/Interest/InterestBreakDown"
 import RetirementSave from "./pages/RetirementSaving/RetirementSave"
+import AddStock from "./pages/stock/AddStock"
+import Portfolio from "./pages/stock/Portfolio"
+import SymbolDetail from "./pages/stock/SymbolDetail"
+
 function App() {
   return (
     <BrowserRouter>
@@ -45,7 +49,19 @@ function App() {
           </Route>
           <Route path="budget" element={<h1>Budget Planner</h1>} />
           <Route path="retire" element={<RetirementSave />} />
-          <Route path="stock" element={<h1>Stock Market Watchlist</h1>} />
+          <Route
+            path="stock"
+            element={
+              <DashboardLayout>
+                <InternalLink to=".">Add your stock</InternalLink>
+                <InternalLink to="portfolio">Portfolio</InternalLink>
+              </DashboardLayout>
+            }
+          >
+            <Route index element={<AddStock />} />
+            <Route path="portfolio" element={<Portfolio />} />
+            <Route path="portfolio/:symbol" element={<SymbolDetail />} />
+          </Route>
           <Route path="investment" element={<h1>Invest Risk Simulator</h1>} />
         </Route>
       </Routes>
