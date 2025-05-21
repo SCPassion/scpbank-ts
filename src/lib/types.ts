@@ -41,3 +41,19 @@ export type FutureSaving = {
   age: number
   total: number
 }
+
+export type SavedSymbol = {
+  symbol: string
+  description: string
+  type: string
+  currency: string
+}
+
+export type FinnhubSymbolRaw = {
+  symbol: string
+  description: string
+  type: string
+  currency: string
+  // ...ignore all other fields; they’ll be silently ignored
+  [key: string]: unknown
+}
