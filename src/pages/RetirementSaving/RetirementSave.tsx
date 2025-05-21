@@ -1,5 +1,6 @@
 import React from "react"
 import { type FutureSaving } from "@/lib/types"
+import { calculateSavings } from "@/functions/retirementOperation"
 
 export default function RetirementSave() {
   const [futureSavings, setFutureSavings] = React.useState<
@@ -21,41 +22,6 @@ export default function RetirementSave() {
     setFutureSavings(calculateSavings(age, monthlyInvest, apr))
   }
 
-  function calculateSavings(
-    currentAge: number,
-    monthlyContribution: number,
-    annualInterestRate: number = 0.05,
-  ) {
-    const maxAge = 65
-    const step = (maxAge - currentAge) / 4
-    const targetAges = Array.from({ length: 4 }, (_, i) =>
-      Math.round(currentAge + (i + 1) * step),
-    )
-    const monthlyRate = annualInterestRate / 12
-    const results: FutureSaving[] = []
-
-    for (let targetAge of targetAges) {
-      const yearsToTarget = targetAge - currentAge
-
-      if (yearsToTarget <= 0) {
-        results.push({ age: targetAge, total: 0 })
-        continue
-      }
-
-      const months = yearsToTarget * 12
-      const futureValue =
-        monthlyContribution *
-        ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate)
-
-      results.push({
-        age: targetAge,
-        total: Math.round(futureValue),
-      })
-    }
-
-    return results
-  }
-
   return (
     <div className="flex flex-col items-center justify-center gap-12 px-8 py-8 text-center">
       <h2 className="font-bol text-4xl">See Your Future Savings at a Glance</h2>
@@ -63,8 +29,8 @@ export default function RetirementSave() {
         Want to know how much your monthly contributions will grow over time?
         <br />
         Enter your age and how much you can save each month. <br />
-        We’ll show your projected savings at ages 40, 50, 60, and 65 — assuming
-        consistent growth. <br />
+        We’ll show your projected savings at different ages— assuming consistent
+        growth. <br />
         It’s your retirement forecast!
       </p>
       <section className="flex justify-center gap-8">
