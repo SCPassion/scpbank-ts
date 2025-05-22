@@ -20,6 +20,7 @@ export async function addStockToDatabase(
       })
 
       if (error) {
+        console.error("Error inserting stock into database:", error)
         throw new Error(error.message)
       }
       console.log("stock recorded")

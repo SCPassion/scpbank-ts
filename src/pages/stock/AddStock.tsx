@@ -1,8 +1,7 @@
-import type { FinnhubSymbolRaw, SavedSymbol } from "@/lib/types"
+import type { SavedSymbol } from "@/lib/types"
 import { useEffect, useState, useId } from "react"
 import { FaRotate } from "react-icons/fa6"
-import { supabase } from "@/supabase-client"
-import { useUserStore } from "@/store/store"
+import { useStocksStore, useUserStore } from "@/store/store"
 import {
   addStockToDatabase,
   fetchStockSymbols,
@@ -11,7 +10,7 @@ import {
 export default function AddStock() {
   const id = useId()
   const user = useUserStore((state) => state.user)
-  const [stockSymbols, setStockSymbols] = useState<SavedSymbol[] | null>(null)
+  const { stockSymbols, setStockSymbols } = useStocksStore()
   const [error, setError] = useState("")
   const [query, setQuery] = useState<string>("")
   const [matches, setMatches] = useState<SavedSymbol[]>([])

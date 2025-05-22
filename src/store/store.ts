@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { type User } from "@supabase/supabase-js"
-import { type Vault, type InterestRecord } from "@/lib/types"
+import { type Vault, type InterestRecord, type SavedSymbol } from "@/lib/types"
 
 type UserStore = {
   user: User | null
@@ -37,4 +37,14 @@ export const useInterestRecordsStore = create<InterestRecordsStore>((set) => ({
     set((state) => ({
       interestRecords: [...state.interestRecords, interestRecord],
     })),
+}))
+
+type StocksStore = {
+  stockSymbols: SavedSymbol[] | null
+  setStockSymbols: (stockSymbols: SavedSymbol[]) => void
+}
+
+export const useStocksStore = create<StocksStore>((set) => ({
+  stockSymbols: null,
+  setStockSymbols: (stockSymbols) => set({ stockSymbols }),
 }))
