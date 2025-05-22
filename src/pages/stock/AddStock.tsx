@@ -1,10 +1,14 @@
 import type { FinnhubSymbolRaw, SavedSymbol } from "@/lib/types"
 import { useEffect, useState, useId } from "react"
 import { FaRotate } from "react-icons/fa6"
+import { supabase } from "@/supabase-client"
+import { useUserStore } from "@/store/store"
 
 export default function AddStock() {
   const id = useId()
+  const user = useUserStore((state) => state.user)
   const [stockSymbols, setStockSymbols] = useState<SavedSymbol[] | null>(null)
+  const [error, setError] = useState("")
   const [query, setQuery] = useState<string>("")
   const [matches, setMatches] = useState<SavedSymbol[]>([])
   const [debouncedQuery, setDebouncedQuery] = useState<string>("")
@@ -66,7 +70,7 @@ export default function AddStock() {
     setStockSymbols(filtered)
   }
 
-  async function handleAction(formData: FormData) {
+  function handleAction(formData: FormData) {
     const stockSymbol = formData.get("stock")
     const amount = formData.get("amount_usd")
     const entryPrice = formData.get("entry_price")
@@ -86,11 +90,42 @@ export default function AddStock() {
     }
 
     // Here you can add the logic to save the stock to your database
-    console.log("Stock added:", {
+    console.log("Stock to added:", {
       symbol: stock.symbol,
       amount: Number(amount),
       entryPrice: Number(entryPrice),
     })
+
+    addStockToDatabase(stock.symbol, Number(amount), Number(entryPrice))
+
+    setQuery("")
+  }
+
+  async function addStockToDatabase(
+    symbol: string,
+    amount: number,
+    entryPrice: number,
+  ) {
+    try {
+      if (user) {
+        const { error } = await supabase.from("investments").insert({
+          symbol,
+          amount_usd: amount,
+          entry_price: entryPrice,
+          user_id: user.id,
+          created_at: new Date().toISOString(),
+        })
+
+        if (error) {
+          throw new Error(error.message)
+        }
+        console.log("stock recorded")
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message)
+      }
+    }
   }
 
   return (

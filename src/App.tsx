@@ -54,7 +54,7 @@ function App() {
             element={
               <DashboardLayout>
                 <InternalLink to=".">Add your stock</InternalLink>
-                <InternalLink to="portfolio">Portfolio</InternalLink>
+                <InternalLink to="portfolio">Your Portfolio</InternalLink>
               </DashboardLayout>
             }
           >
