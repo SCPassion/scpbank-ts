@@ -3,6 +3,10 @@ import { useEffect, useState, useId } from "react"
 import { FaRotate } from "react-icons/fa6"
 import { supabase } from "@/supabase-client"
 import { useUserStore } from "@/store/store"
+import {
+  addStockToDatabase,
+  fetchStockSymbols,
+} from "@/functions/investmentOperation"
 
 export default function AddStock() {
   const id = useId()
@@ -16,7 +20,7 @@ export default function AddStock() {
   // This is used to gather all the stock symbols from the API
   // and store them in the stockSymbols state
   useEffect(() => {
-    fetchStockSymbols()
+    fetchStockSymbols({ setStockSymbols })
   }, [])
 
   // This makes sure the query is check once the user stops typing for 500ms
@@ -50,26 +54,6 @@ export default function AddStock() {
     }
   }, [debouncedQuery, stockSymbols])
 
-  async function fetchStockSymbols() {
-    const response = await fetch(
-      `https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${import.meta.env.VITE_FINNHUB_API_KEY}`,
-    )
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok")
-    }
-    const data: FinnhubSymbolRaw[] = await response.json()
-
-    const filtered: SavedSymbol[] = data.map((item: any) => ({
-      symbol: item.symbol,
-      description: item.description,
-      type: item.type,
-      currency: item.currency,
-    }))
-
-    setStockSymbols(filtered)
-  }
-
   function handleAction(formData: FormData) {
     const stockSymbol = formData.get("stock")
     const amount = formData.get("amount_usd")
@@ -96,36 +80,16 @@ export default function AddStock() {
       entryPrice: Number(entryPrice),
     })
 
-    addStockToDatabase(stock.symbol, Number(amount), Number(entryPrice))
+    user &&
+      addStockToDatabase(
+        user,
+        stock.symbol,
+        Number(amount),
+        Number(entryPrice),
+        setError,
+      )
 
     setQuery("")
-  }
-
-  async function addStockToDatabase(
-    symbol: string,
-    amount: number,
-    entryPrice: number,
-  ) {
-    try {
-      if (user) {
-        const { error } = await supabase.from("investments").insert({
-          symbol,
-          amount_usd: amount,
-          entry_price: entryPrice,
-          user_id: user.id,
-          created_at: new Date().toISOString(),
-        })
-
-        if (error) {
-          throw new Error(error.message)
-        }
-        console.log("stock recorded")
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message)
-      }
-    }
   }
 
   return (
@@ -144,7 +108,7 @@ export default function AddStock() {
         action={handleAction}
       >
         {stockSymbols !== null ? (
-          <div className="flex flex-col items-center justify-center gap-6">
+          <div className="flex flex-col justify-center gap-6">
             <div className="flex gap-8">
               <label
                 htmlFor={`${id}-query`}
@@ -167,7 +131,7 @@ export default function AddStock() {
                 htmlFor={`${id}-stock`}
                 className="text-xl font-bold text-lime-700"
               >
-                Share your symbol here:
+                Pick your symbol here:
               </label>
               <select
                 name="stock"
@@ -235,12 +199,3 @@ export default function AddStock() {
     </div>
   )
 }
-
-// (
-//         <FaRotate
-//           className="animate-spin"
-//           size={40}
-//           fill="green"
-//           style={{ animationDuration: "2s" }}
-//         />
-//       )
