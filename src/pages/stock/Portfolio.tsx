@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import { FaArrowTrendUp } from "react-icons/fa6"
+import { FaArrowTrendDown } from "react-icons/fa6"
 import { supabase } from "@/supabase-client"
 import { useUserStore, usePriceDatasStore } from "@/store/store"
 import type { FinnhubQuote, PriceData, Portfolio } from "@/lib/types"
@@ -23,7 +25,7 @@ export default function Portfolio() {
 
   console.log("Portfolio data:", portfolio)
   console.log("price data:", priceDatas)
-  return (
+  return priceDatas ? (
     <table className="mx-auto mt-8 w-10/12 text-left text-sm text-gray-500 dark:text-gray-400">
       <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
         <tr>
@@ -40,11 +42,61 @@ export default function Portfolio() {
             Current Price
           </th>
           <th scope="col" className="px-6 py-3">
+            24hr Trends
+          </th>
+          <th scope="col" className="px-6 py-3">
             Actions
           </th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        {priceDatas.length > 0 ? (
+          priceDatas.map((item) => (
+            <tr
+              key={item.symbol}
+              className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+            >
+              <td className="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white">
+                {item.symbol}
+              </td>
+              <td className="px-6 py-4">{item.total_investment}</td>
+              <td className="px-6 py-4">{item.entry_price}</td>
+              <td className="px-6 py-4">{item.current_price}</td>
+              <td className="px-6 py-4">
+                {item.percent_change > 0 ? (
+                  <div className="flex items-center gap-4">
+                    <FaArrowTrendUp fill="green" />
+                    <span className="text-green-500">
+                      {item.percent_change}%
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <FaArrowTrendDown fill="red" />
+                    <span className="text-red-500">{item.percent_change}%</span>
+                  </div>
+                )}
+              </td>
+              <td className="px-6 py-4">
+                <button
+                  type="button"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
+                  Remove
+                </button>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <p>No portfolio</p>
+        )}
+      </tbody>
     </table>
+  ) : (
+    <div className="flex h-screen items-center justify-center">
+      <p className="text-2xl font-bold text-gray-700">
+        Loading your portfolio...
+      </p>
+    </div>
   )
 }
