@@ -10,14 +10,48 @@ import {
   fetchPortfolioPrice,
 } from "@/functions/investmentOperation"
 
+type InvestmentDataFormat = {
+  id: string
+  created_at: string
+  user_id: string
+  symbol: string
+  amount_usd: number
+  entry_price: number
+}
 export default function Portfolio() {
   const user = useUserStore((state) => state.user)
-  const { priceDatas, setPriceDatas } = usePriceDatasStore()
+  const { priceDatas, setPriceDatas, removePriceData } = usePriceDatasStore()
   const [portfolio, setPortfolio] = useState<Portfolio[] | null>(null)
   const navigate = useNavigate()
   // Fetch the portfolio data from the database
   useEffect(() => {
     user && fetchPortfolio(user, setPortfolio)
+  }, [user])
+
+  // Subscribe the delete events in the database
+  useEffect(() => {
+    if (!user || !user.email) return
+    const subscription = supabase
+      .channel("delete-investment")
+      .on(
+        "postgres_changes",
+        {
+          event: "DELETE",
+          schema: "public",
+          table: "investments",
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log("Delete event received:", payload)
+          const investmentData = payload.old as InvestmentDataFormat
+          console.log("Payload:", investmentData.user_id)
+        },
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(subscription)
+    }
   }, [user])
 
   // This is used to fetch the price information for the investments

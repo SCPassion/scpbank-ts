@@ -57,8 +57,13 @@ export const useStocksStore = create<StocksStore>((set) => ({
 type PriceDatasStore = {
   priceDatas: PriceData[] | null
   setPriceDatas: (priceDatas: PriceData[]) => void
+  removePriceData: (symbol: string) => void
 }
 export const usePriceDatasStore = create<PriceDatasStore>((set) => ({
   priceDatas: null,
   setPriceDatas: (priceDatas) => set({ priceDatas }),
+  removePriceData: (symbol) =>
+    set((state) => ({
+      priceDatas: state.priceDatas?.filter((item) => item.symbol !== symbol),
+    })),
 }))
