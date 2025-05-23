@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { supabase } from "@/supabase-client"
-import { useUserStore } from "@/store/store"
+import { useUserStore, usePriceDatasStore } from "@/store/store"
 import type { FinnhubQuote, PriceData } from "@/lib/types"
 
 type Portfolio = {
@@ -13,6 +13,7 @@ type Portfolio = {
 }
 export default function Portfolio() {
   const user = useUserStore((state) => state.user)
+  const { priceDatas, setPriceDatas } = usePriceDatasStore()
   const [portfolio, setPortfolio] = useState<Portfolio[] | null>()
   // Fetch the portfolio data from the database
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function Portfolio() {
       change: item.d,
       percent_change: item.dp,
     }))
-    console.log("Price data:", priceData)
+    setPriceDatas(priceData)
   }
 
   async function fetchPortfolio() {
@@ -61,5 +62,7 @@ export default function Portfolio() {
     }
     setPortfolio(data)
   }
+
+  console.log("Portfolio data:", priceDatas)
   return <h1>Port</h1>
 }

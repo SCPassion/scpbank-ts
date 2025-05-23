@@ -1,4 +1,9 @@
-import type { FinnhubSymbolRaw, SavedSymbol } from "@/lib/types"
+import type {
+  FinnhubQuote,
+  FinnhubSymbolRaw,
+  PriceData,
+  SavedSymbol,
+} from "@/lib/types"
 import { supabase } from "@/supabase-client"
 import type { User } from "@supabase/supabase-js"
 
