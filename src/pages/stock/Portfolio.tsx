@@ -21,6 +21,30 @@ export default function Portfolio() {
     portfolio && fetchPortfolioPrice(portfolio, setPriceDatas)
   }, [portfolio])
 
-  console.log("Portfolio data:", priceDatas)
-  return <h1>Port</h1>
+  console.log("Portfolio data:", portfolio)
+  console.log("price data:", priceDatas)
+  return (
+    <table className="mx-auto mt-8 w-10/12 text-left text-sm text-gray-500 dark:text-gray-400">
+      <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" className="px-6 py-3">
+            Symbol
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Amount USD
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Entry Price
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Current Price
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  )
 }

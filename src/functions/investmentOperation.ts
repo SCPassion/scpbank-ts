@@ -106,6 +106,8 @@ export async function fetchPortfolioPrice(
     previous_close: item.pc,
     change: item.d,
     percent_change: item.dp,
+    entry_price: portfolio[index].entry_price,
+    total_investment: portfolio[index].amount_usd,
   }))
   setPriceDatas(priceData)
 }

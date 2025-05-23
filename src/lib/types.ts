@@ -86,4 +86,6 @@ export type PriceData = {
   previous_close: number
   change: number
   percent_change: number
+  entry_price: number
+  total_investment: number
 }
