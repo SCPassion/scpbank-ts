@@ -1,6 +1,7 @@
 import type {
   FinnhubQuote,
   FinnhubSymbolRaw,
+  Portfolio,
   PriceData,
   SavedSymbol,
 } from "@/lib/types"
@@ -60,4 +61,51 @@ export async function fetchStockSymbols({
   }))
 
   setStockSymbols(filtered)
+}
+
+export async function fetchPortfolio(
+  user: User,
+  setPortfolio: (portfolio: Portfolio[]) => void,
+) {
+  if (!user) return
+  const { data, error } = await supabase
+    .from("investments")
+    .select("*")
+    .eq("user_id", user.id)
+
+  if (error) {
+    console.error("Error fetching portfolio data:", error)
+    return
+  }
+  if (!data) {
+    console.log("No portfolio data found")
+    return
+  }
+  setPortfolio(data)
+}
+
+export async function fetchPortfolioPrice(
+  portfolio: Portfolio[],
+  setPriceDatas: (priceData: PriceData[]) => void,
+) {
+  const promisesArray: Promise<Response>[] = portfolio.map((item) =>
+    fetch(
+      `https://finnhub.io/api/v1/quote?symbol=${item.symbol}&token=${import.meta.env.VITE_FINNHUB_API_KEY}`,
+    ),
+  )
+  const responses: Response[] = await Promise.all(promisesArray)
+  const data: FinnhubQuote[] = await Promise.all(
+    responses.map((res) => res.json()),
+  )
+  const priceData: PriceData[] = data.map((item, index) => ({
+    symbol: portfolio[index].symbol,
+    current_price: item.c,
+    highest_price: item.h,
+    lowest_price: item.l,
+    open_price: item.o,
+    previous_close: item.pc,
+    change: item.d,
+    percent_change: item.dp,
+  }))
+  setPriceDatas(priceData)
 }

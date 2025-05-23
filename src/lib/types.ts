@@ -58,6 +58,15 @@ export type FinnhubSymbolRaw = {
   [key: string]: unknown
 }
 
+export type Portfolio = {
+  id: number
+  symbol: string
+  amount_usd: number
+  entry_price: number
+  user_id: string
+  created_at: string
+}
+
 export type FinnhubQuote = {
   c: number // Current price
   h: number // High price of the day
