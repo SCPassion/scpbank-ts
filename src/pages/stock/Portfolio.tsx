@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router"
 import { FaArrowTrendUp } from "react-icons/fa6"
 import { FaArrowTrendDown } from "react-icons/fa6"
 import { supabase } from "@/supabase-client"
 import { useUserStore, usePriceDatasStore } from "@/store/store"
-import type { FinnhubQuote, PriceData, Portfolio } from "@/lib/types"
+import type { Portfolio } from "@/lib/types"
 import {
   fetchPortfolio,
   fetchPortfolioPrice,
@@ -13,6 +14,7 @@ export default function Portfolio() {
   const user = useUserStore((state) => state.user)
   const { priceDatas, setPriceDatas } = usePriceDatasStore()
   const [portfolio, setPortfolio] = useState<Portfolio[] | null>(null)
+  const navigate = useNavigate()
   // Fetch the portfolio data from the database
   useEffect(() => {
     user && fetchPortfolio(user, setPortfolio)
@@ -23,8 +25,29 @@ export default function Portfolio() {
     portfolio && fetchPortfolioPrice(portfolio, setPriceDatas)
   }, [portfolio])
 
-  console.log("Portfolio data:", portfolio)
-  console.log("price data:", priceDatas)
+  async function handleDeleteInDatabase(symbol: string) {
+    try {
+      if (user) {
+        const { error } = await supabase
+          .from("investments")
+          .delete()
+          .eq("symbol", symbol)
+          .eq("user_id", user.id)
+
+        if (error) {
+          console.error("Error deleting stock from database:", error)
+          throw new Error(error.message)
+        }
+        console.log("Stock deleted from database")
+      } else {
+        throw new Error("User not found")
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error deleting stock from database:", error)
+      }
+    }
+  }
   return priceDatas ? (
     <table className="mx-auto mt-8 w-10/12 text-left text-sm text-gray-800 shadow-md hover:shadow-lg dark:text-gray-400">
       <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
@@ -58,7 +81,7 @@ export default function Portfolio() {
             <tr
               key={item.symbol}
               className="cursor-pointer border-b bg-white hover:bg-teal-50"
-              onClick={() => console.log(item.symbol)}
+              onClick={() => navigate(`${item.symbol}`, { replace: true })}
             >
               <td className="px-6 py-4 font-medium whitespace-nowrap text-black dark:text-white">
                 {item.symbol}
@@ -111,6 +134,10 @@ export default function Portfolio() {
                 <button
                   type="button"
                   className="cursor-pointer rounded-full bg-rose-500 px-4 py-2 font-medium text-white duration-300 hover:bg-red-700"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleDeleteInDatabase(item.symbol)
+                  }}
                 >
                   Delete
                 </button>
