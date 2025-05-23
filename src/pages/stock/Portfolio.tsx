@@ -26,7 +26,7 @@ export default function Portfolio() {
   console.log("Portfolio data:", portfolio)
   console.log("price data:", priceDatas)
   return priceDatas ? (
-    <table className="mx-auto mt-8 w-10/12 text-left text-sm text-gray-500 shadow-md hover:shadow-lg dark:text-gray-400">
+    <table className="mx-auto mt-8 w-10/12 text-left text-sm text-gray-800 shadow-md hover:shadow-lg dark:text-gray-400">
       <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" className="px-6 py-3">
@@ -57,9 +57,10 @@ export default function Portfolio() {
           priceDatas.map((item) => (
             <tr
               key={item.symbol}
-              className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+              className="cursor-pointer border-b bg-white hover:bg-teal-50"
+              onClick={() => console.log(item.symbol)}
             >
-              <td className="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white">
+              <td className="px-6 py-4 font-medium whitespace-nowrap text-black dark:text-white">
                 {item.symbol}
               </td>
               <td className="px-6 py-4">{item.total_investment}</td>
