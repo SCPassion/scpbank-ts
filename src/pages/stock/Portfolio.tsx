@@ -26,7 +26,7 @@ export default function Portfolio() {
   console.log("Portfolio data:", portfolio)
   console.log("price data:", priceDatas)
   return priceDatas ? (
-    <table className="mx-auto mt-8 w-10/12 text-left text-sm text-gray-500 dark:text-gray-400">
+    <table className="mx-auto mt-8 w-10/12 text-left text-sm text-gray-500 shadow-md hover:shadow-lg dark:text-gray-400">
       <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" className="px-6 py-3">
@@ -40,6 +40,9 @@ export default function Portfolio() {
           </th>
           <th scope="col" className="px-6 py-3">
             Current Price
+          </th>
+          <th scope="col" className="px-6 py-3">
+            Current Gain / Loss %
           </th>
           <th scope="col" className="px-6 py-3">
             24hr Trends
@@ -63,6 +66,32 @@ export default function Portfolio() {
               <td className="px-6 py-4">{item.entry_price}</td>
               <td className="px-6 py-4">{item.current_price}</td>
               <td className="px-6 py-4">
+                {item.entry_price - item.current_price > 0 ? (
+                  <div className="flex items-center gap-4">
+                    <FaArrowTrendDown fill="red" />
+                    <span className="text-red-500">
+                      {(
+                        ((item.entry_price - item.current_price) /
+                          item.entry_price) *
+                        100
+                      ).toFixed(2)}
+                      %
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <FaArrowTrendUp fill="green" />
+                    <span className="text-green-500">
+                      {((item.current_price - item.entry_price) /
+                        item.entry_price) *
+                        100}
+                      %
+                    </span>
+                  </div>
+                )}
+              </td>
+
+              <td className="px-6 py-4">
                 {item.percent_change > 0 ? (
                   <div className="flex items-center gap-4">
                     <FaArrowTrendUp fill="green" />
@@ -80,9 +109,9 @@ export default function Portfolio() {
               <td className="px-6 py-4">
                 <button
                   type="button"
-                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                  className="cursor-pointer rounded-full bg-rose-500 px-4 py-2 font-medium text-white duration-300 hover:bg-red-700"
                 >
-                  Remove
+                  Delete
                 </button>
               </td>
             </tr>
