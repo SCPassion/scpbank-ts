@@ -57,3 +57,24 @@ export type FinnhubSymbolRaw = {
   // ...ignore all other fields; they’ll be silently ignored
   [key: string]: unknown
 }
+
+export type FinnhubQuote = {
+  c: number // Current price
+  h: number // High price of the day
+  l: number // Low price of the day
+  o: number // Open price of the day
+  pc: number // Previous close price
+  d: number // Change in price
+  dp: number // Percentage change in price
+}
+
+export type PriceData = {
+  symbol: string
+  current_price: number
+  highest_price: number
+  lowest_price: number
+  open_price: number
+  previous_close: number
+  change: number
+  percent_change: number
+}
