@@ -1,14 +1,50 @@
-import { Link, useParams } from "react-router"
+import { Link, useParams, useNavigate } from "react-router"
 import { IoReturnUpBack } from "react-icons/io5"
-import { usePriceDatasStore } from "@/store/store"
+import { usePriceDatasStore, useUserStore } from "@/store/store"
 import { useId, useState } from "react"
+import { supabase } from "@/supabase-client"
 
 export default function SymbolDetail() {
   const id = useId()
   const [modelOpen, setModelOpen] = useState(false)
+  const { user } = useUserStore()
   const { priceDatas } = usePriceDatasStore()
   const { symbol } = useParams<{ symbol: string }>()
   const symbolData = priceDatas?.find((data) => data.symbol === symbol)
+  const navigate = useNavigate()
+
+  async function UpdateInvestment(
+    symbol: string,
+    entryPrice: number,
+    totalInvestment: number,
+  ) {
+    if (!user) return
+
+    const { error } = await supabase
+      .from("investments")
+      .update({
+        entry_price: entryPrice,
+        amount_usd: totalInvestment,
+      })
+      .eq("symbol", symbol)
+      .eq("user_id", user.id)
+
+    if (error) {
+      console.error("Error updating investment:", error)
+      throw new Error(error.message)
+    }
+
+    console.log("Investment updated successfully")
+    navigate("..", { replace: true, relative: "path" })
+  }
+
+  function handleFormAction(formData: FormData) {
+    const totalInvestment = Number(formData.get("total_investment"))
+    const entryPrice = Number(formData.get("entry_price"))
+
+    symbolData &&
+      UpdateInvestment(symbolData.symbol, entryPrice, totalInvestment)
+  }
 
   return (
     <div className="px-8 py-4">
@@ -97,7 +133,10 @@ export default function SymbolDetail() {
 
           {modelOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(17,24,39,0.5)]">
-              <form className="space-y-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl">
+              <form
+                className="space-y-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
+                action={handleFormAction}
+              >
                 <div className="flex gap-4">
                   <label
                     htmlFor={`${id}-entry`}
@@ -111,6 +150,7 @@ export default function SymbolDetail() {
                     className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
                     id={`${id}-entry`}
                     required
+                    name="entry_price"
                   />
                 </div>
                 <div className="flex gap-4">
@@ -126,6 +166,7 @@ export default function SymbolDetail() {
                     className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
                     id={`${id}-total`}
                     required
+                    name="total_investment"
                   />
                 </div>
                 <button
