@@ -1,14 +1,14 @@
 import { Link, useParams } from "react-router"
 import { IoReturnUpBack } from "react-icons/io5"
 import { usePriceDatasStore } from "@/store/store"
-import { useId } from "react"
+import { useId, useState } from "react"
 
 export default function SymbolDetail() {
   const id = useId()
+  const [modelOpen, setModelOpen] = useState(false)
   const { priceDatas } = usePriceDatasStore()
   const { symbol } = useParams<{ symbol: string }>()
   const symbolData = priceDatas?.find((data) => data.symbol === symbol)
-  console.log("Symbol Data:", symbolData)
 
   return (
     <div className="px-8 py-4">
@@ -87,50 +87,63 @@ export default function SymbolDetail() {
           </section>
 
           <div className="mt-6 flex flex-col items-center">
-            <button className="mb-4 cursor-pointer rounded bg-green-600 px-4 py-2 text-white hover:bg-green-800">
+            <button
+              className="mb-4 cursor-pointer rounded bg-green-600 px-4 py-2 text-white hover:bg-green-800"
+              onClick={() => setModelOpen(true)}
+            >
               Want to update your Investement?
             </button>
-            <form className="space-y-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl">
-              <div className="flex gap-4">
-                <label
-                  htmlFor={`${id}-entry`}
-                  className="text-xl font-bold text-lime-700"
-                >
-                  New entry price:{" "}
-                </label>
-                <input
-                  type="number"
-                  placeholder="New Entry Price"
-                  className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
-                  defaultValue={symbolData.entry_price}
-                  id={`${id}-entry`}
-                  required
-                />
-              </div>
-              <div className="flex gap-4">
-                <label
-                  htmlFor={`${id}-total`}
-                  className="text-xl font-bold text-lime-700"
-                >
-                  New total invesement:{" "}
-                </label>
-                <input
-                  type="number"
-                  placeholder="New Total Investment"
-                  className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
-                  defaultValue={symbolData.total_investment}
-                  id={`${id}-total`}
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full cursor-pointer rounded-2xl bg-green-800 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-green-700"
-              >
-                Update Investment
-              </button>
-            </form>
           </div>
+
+          {modelOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(17,24,39,0.5)]">
+              <form className="space-y-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl">
+                <div className="flex gap-4">
+                  <label
+                    htmlFor={`${id}-entry`}
+                    className="text-xl font-bold text-lime-700"
+                  >
+                    New entry price:{" "}
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="100"
+                    className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
+                    id={`${id}-entry`}
+                    required
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <label
+                    htmlFor={`${id}-total`}
+                    className="text-xl font-bold text-lime-700"
+                  >
+                    New total invesement:{" "}
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="100"
+                    className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
+                    id={`${id}-total`}
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full cursor-pointer rounded-2xl bg-green-800 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-green-700"
+                >
+                  Update Investment
+                </button>
+                <button
+                  type="button"
+                  className="w-full cursor-pointer rounded-2xl bg-red-600 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-red-700"
+                  onClick={() => setModelOpen(false)}
+                >
+                  Cancel
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       )}
     </div>
