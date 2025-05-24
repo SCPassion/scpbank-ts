@@ -63,68 +63,65 @@ export default function SymbolDetail() {
           </h2>
           <section className="grid grid-cols-3 grid-rows-3 gap-4 space-y-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl">
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-xl font-bold text-lime-700">Symbol name: </h1>
-              <h1>{symbolData.symbol}</h1>
+              <p className="text-xl font-bold text-lime-700">Symbol name: </p>
+              <p>{symbolData.symbol}</p>
             </div>
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-xl font-bold text-lime-700">
-                Current Price:{" "}
-              </h1>
-              <h1>${symbolData.current_price}</h1>
+              <p className="text-xl font-bold text-lime-700">Current Price: </p>
+              <p>${symbolData.current_price}</p>
             </div>
 
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-xl font-bold text-lime-700">
+              <p className="text-xl font-bold text-lime-700">
                 Percent Change:{" "}
-              </h1>
-              <h1>{symbolData.percent_change}</h1>
+              </p>
+              <p>{symbolData.percent_change}</p>
             </div>
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-xl font-bold text-lime-700">
-                Highest Price:{" "}
-              </h1>
-              <h1>${symbolData.highest_price}</h1>
+              <p className="text-xl font-bold text-lime-700">Highest Price: </p>
+              <p>${symbolData.highest_price}</p>
             </div>
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-xl font-bold text-lime-700">
-                Lowest Price:{" "}
-              </h1>
-              <h1>${symbolData.lowest_price}</h1>
+              <p className="text-xl font-bold text-lime-700">Lowest Price: </p>
+              <p>${symbolData.lowest_price}</p>
             </div>
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-xl font-bold text-lime-700">Open Price: </h1>
-              <h1>${symbolData.open_price}</h1>
+              <p className="text-xl font-bold text-lime-700">Open Price: </p>
+              <p>${symbolData.open_price}</p>
             </div>
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-xl font-bold text-lime-700">
+              <p className="text-xl font-bold text-lime-700">
                 Previous Close:{" "}
-              </h1>
-              <h1>${symbolData.previous_close}</h1>
+              </p>
+              <p>${symbolData.previous_close}</p>
             </div>
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-xl font-bold text-lime-700">
+              <p className="text-xl font-bold text-lime-700">
                 Change in 24hr:{" "}
-              </h1>
-              <h1>${symbolData.change}</h1>
+              </p>
+              <p>${symbolData.change}</p>
             </div>
           </section>
           <h2 className="mt-8 mb-4 text-center text-2xl font-bold">
             Your Investment Details
           </h2>
-          <section className="flex justify-center gap-8">
+
+          <section className="mx-auto flex w-5/12 justify-center gap-8 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl">
             <div className="flex flex-col gap-2">
-              <h1>Entry Price: </h1>
-              <h1>{symbolData.entry_price}</h1>
+              <p className="text-xl font-bold text-lime-700">Entry Price: </p>
+              <p className="text-center">${symbolData.entry_price}</p>
             </div>
             <div className="flex flex-col gap-2">
-              <h1>Total Investment: </h1>
-              <h1>{symbolData.total_investment}</h1>
+              <p className="text-xl font-bold text-lime-700">
+                Total Investment:{" "}
+              </p>
+              <p className="text-center">${symbolData.total_investment}</p>
             </div>
           </section>
 
           <div className="mt-6 flex flex-col items-center">
             <button
-              className="mb-4 cursor-pointer rounded bg-green-600 px-4 py-2 text-white hover:bg-green-800"
+              className="w-5/12 cursor-pointer rounded-2xl bg-green-700 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-green-900"
               onClick={() => setModelOpen(true)}
             >
               Want to update your Investement?
