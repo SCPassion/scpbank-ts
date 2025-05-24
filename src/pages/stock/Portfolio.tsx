@@ -42,9 +42,9 @@ export default function Portfolio() {
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          console.log("Delete event received:", payload)
           const investmentData = payload.old as InvestmentDataFormat
-          console.log("Payload:", investmentData.user_id)
+          removePriceData(investmentData.symbol)
+          console.log("Investment deleted:", investmentData)
         },
       )
       .subscribe()
