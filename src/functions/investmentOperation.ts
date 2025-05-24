@@ -111,3 +111,28 @@ export async function fetchPortfolioPrice(
   }))
   setPriceDatas(priceData)
 }
+
+export async function UpdateInvestment(
+  user: User | null,
+  symbol: string,
+  entryPrice: number,
+  totalInvestment: number,
+) {
+  if (!user) return
+
+  const { error } = await supabase
+    .from("investments")
+    .update({
+      entry_price: entryPrice,
+      amount_usd: totalInvestment,
+    })
+    .eq("symbol", symbol)
+    .eq("user_id", user.id)
+
+  if (error) {
+    console.error("Error updating investment:", error)
+    throw new Error(error.message)
+  }
+
+  console.log("Investment updated successfully")
+}

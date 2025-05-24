@@ -2,7 +2,7 @@ import { Link, useParams, useNavigate } from "react-router"
 import { IoReturnUpBack } from "react-icons/io5"
 import { usePriceDatasStore, useUserStore } from "@/store/store"
 import { useId, useState } from "react"
-import { supabase } from "@/supabase-client"
+import { UpdateInvestment } from "@/functions/investmentOperation"
 
 export default function SymbolDetail() {
   const id = useId()
@@ -13,37 +13,14 @@ export default function SymbolDetail() {
   const symbolData = priceDatas?.find((data) => data.symbol === symbol)
   const navigate = useNavigate()
 
-  async function UpdateInvestment(
-    symbol: string,
-    entryPrice: number,
-    totalInvestment: number,
-  ) {
-    if (!user) return
-
-    const { error } = await supabase
-      .from("investments")
-      .update({
-        entry_price: entryPrice,
-        amount_usd: totalInvestment,
-      })
-      .eq("symbol", symbol)
-      .eq("user_id", user.id)
-
-    if (error) {
-      console.error("Error updating investment:", error)
-      throw new Error(error.message)
-    }
-
-    console.log("Investment updated successfully")
-    navigate("..", { replace: true, relative: "path" })
-  }
-
   function handleFormAction(formData: FormData) {
     const totalInvestment = Number(formData.get("total_investment"))
     const entryPrice = Number(formData.get("entry_price"))
 
-    symbolData &&
-      UpdateInvestment(symbolData.symbol, entryPrice, totalInvestment)
+    if (symbolData) {
+      UpdateInvestment(user, symbolData.symbol, entryPrice, totalInvestment)
+      navigate("..", { replace: true, relative: "path" })
+    }
   }
 
   return (
