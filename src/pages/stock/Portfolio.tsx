@@ -115,7 +115,15 @@ export default function Portfolio() {
             <tr
               key={item.symbol}
               className="cursor-pointer border-b bg-white hover:bg-teal-50"
-              onClick={() => navigate(`${item.symbol}`, { replace: true })}
+              onClick={() =>
+                navigate(
+                  {
+                    pathname: `${item.symbol}`,
+                    search: `?current_price=${item.current_price}&highest_price=${item.highest_price}&lowest_price=${item.lowest_price}&open_price=${item.open_price}&previous_price=${item.previous_close}&change=${item.change}&percent_change=${item.percent_change}&entry_price=${item.entry_price}&total_investment=${item.total_investment}`,
+                  },
+                  { replace: true },
+                )
+              }
             >
               <td className="px-6 py-4 font-medium whitespace-nowrap text-black dark:text-white">
                 {item.symbol}
