@@ -89,3 +89,12 @@ export type PriceData = {
   entry_price: number
   total_investment: number
 }
+
+export type InvestmentDataFormat = {
+  id: string
+  created_at: string
+  user_id: string
+  symbol: string
+  amount_usd: number
+  entry_price: number
+}

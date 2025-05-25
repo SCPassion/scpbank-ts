@@ -4,20 +4,12 @@ import { FaArrowTrendUp } from "react-icons/fa6"
 import { FaArrowTrendDown } from "react-icons/fa6"
 import { supabase } from "@/supabase-client"
 import { useUserStore, usePriceDatasStore } from "@/store/store"
-import type { Portfolio } from "@/lib/types"
+import type { InvestmentDataFormat, Portfolio } from "@/lib/types"
 import {
   fetchPortfolio,
   fetchPortfolioPrice,
 } from "@/functions/investmentOperation"
 
-type InvestmentDataFormat = {
-  id: string
-  created_at: string
-  user_id: string
-  symbol: string
-  amount_usd: number
-  entry_price: number
-}
 export default function Portfolio() {
   const user = useUserStore((state) => state.user)
   const { priceDatas, setPriceDatas, removePriceData } = usePriceDatasStore()
