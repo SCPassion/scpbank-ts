@@ -2,17 +2,66 @@ import { useId, useState } from "react"
 import InputType from "./InputType"
 import ExpenseCategory from "./ExpenseCategory"
 import IncomeCategory from "./IncomeCategory"
+import { supabase } from "@/supabase-client"
+import { useUserStore } from "@/store/store"
+import type { User } from "@supabase/supabase-js"
 
+type CategoryRecord = {
+  user: User
+  type: string
+  amount: number
+  category: string
+}
 export default function BudgetPlan() {
+  const user = useUserStore((state) => state.user)
   const id = useId()
   // default state for expense/income toggle
   const [isExpense, setIsExpense] = useState(true)
 
+  async function createCategoryRecord({
+    user,
+    type,
+    amount,
+    category,
+  }: CategoryRecord) {
+    try {
+      const { data } = await supabase
+        .from("transactions")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("category", category)
+
+      if (data && data.length > 0) {
+        throw new Error(`You already have a ${category} category.`)
+      }
+
+      const { error } = await supabase.from("transactions").insert({
+        user_id: user.id,
+        type,
+        amount,
+        category,
+        created_at: new Date().toISOString(),
+      })
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      console.log("category created")
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message)
+      }
+    }
+  }
+
   function handleFormAction(formData: FormData) {
-    const spendingType = String(formData.get("spending-type"))
+    const type = String(formData.get("type"))
     const amount = Number(formData.get("amount"))
-    const category = String(formData.get(`${spendingType}-category`))
-    console.log({ spendingType, amount, category })
+    const category = String(formData.get(`${type}-category`))
+    console.log({ type, amount, category })
+
+    user && createCategoryRecord({ user, type, amount, category })
   }
 
   return (
