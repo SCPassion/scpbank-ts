@@ -98,10 +98,3 @@ export type InvestmentDataFormat = {
   amount_usd: number
   entry_price: number
 }
-
-export type CategoryRecord = {
-  user: User
-  type: string
-  amount: number
-  category: string
-}
