@@ -8,7 +8,8 @@ export default function BudgetPlan() {
   function handleFormAction(formData: FormData) {
     const spendingType = String(formData.get("spending-type"))
     const amount = Number(formData.get("amount"))
-    console.log({ spendingType, amount })
+    const category = String(formData.get(`${spendingType}-category`))
+    console.log({ spendingType, amount, category })
   }
 
   return (
@@ -31,7 +32,7 @@ export default function BudgetPlan() {
             Add your spending here!
           </h3>
 
-          <fieldset className="flex items-center gap-8 rounded-2xl border border-green-700 p-2">
+          <fieldset className="flex items-center gap-8 rounded-2xl border border-green-700 p-3">
             <legend className="text-xl font-bold text-lime-700">
               Spending Type
             </legend>
@@ -74,6 +75,59 @@ export default function BudgetPlan() {
               required
             />
           </div>
+
+          {isExpense ? (
+            <div className="flex items-center gap-8">
+              <label
+                htmlFor={`${id}-expense-category`}
+                className="text-xl font-bold text-lime-700"
+              >
+                Category:
+              </label>
+              <select
+                id={`${id}-expense-category`}
+                name="expense-category"
+                className="w-full bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
+                required
+              >
+                <option value="" disabled selected>
+                  -- Choose an expense category
+                </option>
+                <option value="Housing">Housing</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Health">Health</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Education">Education</option>
+                <option value="Rent">Rent</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+          ) : (
+            <div className="flex items-center gap-8">
+              <label
+                htmlFor={`${id}-income-category`}
+                className="text-xl font-bold text-lime-700"
+              >
+                Category:
+              </label>
+              <select
+                id={`${id}-income-category`}
+                name="income-category"
+                className="w-full bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
+                required
+              >
+                <option value="" disabled selected>
+                  -- Choose an income category
+                </option>
+                <option value="Salary">Salary</option>
+                <option value="Freelance">Freelance</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          )}
 
           <button
             type="submit"
