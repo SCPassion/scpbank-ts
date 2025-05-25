@@ -17,7 +17,21 @@ export async function addStockToDatabase(
 ) {
   try {
     if (user) {
-      const { error } = await supabase.from("investments").insert({
+      // Check if the user already has an investment with the same symbol
+      const { data } = await supabase
+        .from("investments")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("symbol", symbol)
+
+      console.log("Checking for existing investment:", data)
+      if (data && data.length > 0) {
+        throw new Error(
+          `You already have an investment in ${symbol}. Please update your existing investment instead.`,
+        )
+      }
+
+      const { error: insertError } = await supabase.from("investments").insert({
         symbol,
         amount_usd: amount,
         entry_price: entryPrice,
@@ -25,11 +39,12 @@ export async function addStockToDatabase(
         created_at: new Date().toISOString(),
       })
 
-      if (error) {
-        console.error("Error inserting stock into database:", error)
-        throw new Error(error.message)
+      if (insertError) {
+        console.error("Error inserting stock into database:", insertError)
+        throw new Error(insertError.message)
       }
       console.log("stock recorded")
+      setError("")
     }
   } catch (error) {
     if (error instanceof Error) {

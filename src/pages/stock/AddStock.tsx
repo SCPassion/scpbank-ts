@@ -6,6 +6,7 @@ import {
   addStockToDatabase,
   fetchStockSymbols,
 } from "@/functions/investmentOperation"
+import { Link } from "react-router"
 
 export default function AddStock() {
   const id = useId()
@@ -102,6 +103,18 @@ export default function AddStock() {
         <br /> — whether you’re chasing the hype or buying the dip. No noise.
         Just numbers that matter.
       </p>
+      {error && (
+        <p className="text-red-500">
+          Error: {error} <br />
+          Please try again. or check your profolio{" "}
+          <Link
+            to="portfolio"
+            className="text-green-700 underline hover:font-bold hover:text-green-800"
+          >
+            here
+          </Link>
+        </p>
+      )}
       <form
         className="rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
         action={handleAction}
