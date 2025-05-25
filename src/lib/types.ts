@@ -1,4 +1,4 @@
-import type { PostgrestError } from "@supabase/supabase-js"
+import type { PostgrestError, User } from "@supabase/supabase-js"
 
 export type Vault = {
   purpose: string
@@ -97,4 +97,11 @@ export type InvestmentDataFormat = {
   symbol: string
   amount_usd: number
   entry_price: number
+}
+
+export type CategoryRecord = {
+  user: User
+  type: string
+  amount: number
+  category: string
 }
