@@ -1,7 +1,16 @@
-import { useId } from "react"
+import { useId, useState } from "react"
 
 export default function BudgetPlan() {
   const id = useId()
+  // default state for expense/income toggle
+  const [isExpense, setIsExpense] = useState(true)
+
+  function handleFormAction(formData: FormData) {
+    const spendingType = String(formData.get("spending-type"))
+    const amount = Number(formData.get("amount"))
+    console.log({ spendingType, amount })
+  }
+
   return (
     <section className="mx-32 my-6 flex flex-col items-center justify-center gap-6 text-center">
       <h1 className="font-bol text-4xl">
@@ -14,7 +23,10 @@ export default function BudgetPlan() {
       </p>
 
       <div>
-        <form className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl">
+        <form
+          className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
+          action={handleFormAction}
+        >
           <h3 className="text-2xl font-bold text-lime-700">
             Add your spending here!
           </h3>
@@ -30,6 +42,7 @@ export default function BudgetPlan() {
                 value="expense"
                 className="grow-1 bg-lime-200 px-4 py-1 text-xl accent-green-700 placeholder:text-gray-700"
                 defaultChecked
+                onClick={() => setIsExpense(true)}
               />
               Expense
             </label>
@@ -39,6 +52,7 @@ export default function BudgetPlan() {
                 name="spending-type"
                 value="income"
                 className="grow-1 bg-lime-200 px-4 py-1 text-xl accent-green-700 placeholder:text-gray-700"
+                onClick={() => setIsExpense(false)}
               />
               Income
             </label>
