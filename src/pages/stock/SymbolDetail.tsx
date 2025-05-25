@@ -1,21 +1,12 @@
-import { Link, useParams, useNavigate, useSearchParams } from "react-router"
+import { Link } from "react-router"
 import { IoReturnUpBack } from "react-icons/io5"
-import { useUserStore } from "@/store/store"
-import { useId, useState } from "react"
 import { UpdateInvestment } from "@/functions/investmentOperation"
+import useSymbol from "@/hooks/useSymbol"
 
 export default function SymbolDetail() {
-  const id = useId()
-  const [modelOpen, setModelOpen] = useState(false)
-  const { user } = useUserStore()
+  const { id, modelOpen, setModelOpen, user, symbol, navigate, searchParams } =
+    useSymbol()
 
-  // Get the symbol from the URL parameters
-  const { symbol } = useParams<{ symbol: string }>()
-  const navigate = useNavigate()
-
-  // Get the search parameters from the URL
-  // These parameters are passed from the Portfolio page when navigating to this detail page
-  const [searchParams] = useSearchParams()
   const current_price = searchParams.get("current_price")
   const highest_price = searchParams.get("highest_price")
   const lowest_price = searchParams.get("lowest_price")
