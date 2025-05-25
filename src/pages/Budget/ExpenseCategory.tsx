@@ -11,9 +11,10 @@ export default function ExpenseCategory({ id }: { id: string }) {
         id={`${id}-expense-category`}
         name="expense-category"
         className="w-full bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
+        defaultValue={""}
         required
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           -- Choose an expense category
         </option>
         <option value="Housing">Housing</option>

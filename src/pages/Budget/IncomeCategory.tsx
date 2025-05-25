@@ -12,8 +12,9 @@ export default function IncomeCategory({ id }: { id: string }) {
         name="income-category"
         className="w-full bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
         required
+        defaultValue={""}
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           -- Choose an income category
         </option>
         <option value="Salary">Salary</option>
