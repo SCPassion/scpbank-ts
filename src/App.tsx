@@ -12,6 +12,7 @@ import RetirementSave from "./pages/RetirementSaving/RetirementSave"
 import AddStock from "./pages/stock/AddStock"
 import Portfolio from "./pages/stock/Portfolio"
 import SymbolDetail from "./pages/stock/SymbolDetail"
+import BudgetPlan from "./pages/Budget/BudgetPlan"
 
 function App() {
   return (
@@ -47,7 +48,7 @@ function App() {
             <Route index element={<InformationGather />} />
             <Route path="breakdown" element={<InterestBreakDown />} />
           </Route>
-          <Route path="budget" element={<h1>Budget Planner</h1>} />
+          <Route path="budget" element={<BudgetPlan />} />
           <Route path="retire" element={<RetirementSave />} />
           <Route
             path="stock"
