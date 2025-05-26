@@ -80,11 +80,18 @@ export default function BudgetPlan() {
     const type = isExpense ? "expense" : "income"
     const amount = Number(formData.get("amount"))
     const category = String(formData.get(`${type}-category`))
-    console.log({ type, amount, category })
+    console.log("Adding:", { type, amount, category })
 
     user && createCategoryRecord({ user, type, amount, category, setError })
 
     setIsExpense(true) // Reset to default state after submission
+  }
+
+  function handleEditAction(formData: FormData) {
+    const type = isExpense ? "expense" : "income"
+    const amount = Number(formData.get("amount"))
+    const category = String(formData.get(`${type}-category`))
+    console.log("Editing:", { type, amount, category })
   }
 
   return (
@@ -156,9 +163,9 @@ export default function BudgetPlan() {
           </button>
         </form>
 
-        {/* <form
+        <form
           className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
-          action={handleAddAction}
+          action={handleEditAction}
         >
           <h3 className="text-2xl font-bold text-lime-700">
             {isExpense ? "Edit your spending here!" : "Edit your income here!"}
@@ -205,7 +212,7 @@ export default function BudgetPlan() {
           >
             Update now!
           </button>
-        </form> */}
+        </form>
       </div>
     </section>
   )
