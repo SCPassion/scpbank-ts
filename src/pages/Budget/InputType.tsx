@@ -5,7 +5,7 @@ type InputTypeProps = {
 export default function InputType({ setIsExpense }: InputTypeProps) {
   return (
     <fieldset className="flex items-center gap-8 rounded-2xl border border-green-700 p-3">
-      <legend className="text-xl font-bold text-lime-700">Spending Type</legend>
+      <legend className="text-xl font-bold text-lime-700">Category Type</legend>
       <label className="text-lg font-medium text-lime-800">
         <input
           type="radio"

@@ -71,7 +71,10 @@ export default function BudgetPlan() {
     }
   }, [user])
 
-  const chartData = budgets?.map((budget) => console.log(budget))
+  const incomeCategories = budgets?.filter((budget) => budget.type === "income")
+  const expenseCategories = budgets?.filter(
+    (budget) => budget.type === "expense",
+  )
 
   function handleFormAction(formData: FormData) {
     const type = String(formData.get("type"))
@@ -97,16 +100,17 @@ export default function BudgetPlan() {
 
       {error && <p className="text-red-500">Error: {error}</p>}
 
-      <div className="flex flex-wrap gap-4">
+      <InputType setIsExpense={setIsExpense} />
+      <div className="flex flex-wrap justify-center gap-4">
         <form
           className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
           action={handleFormAction}
         >
           <h3 className="text-2xl font-bold text-lime-700">
-            Add your spending here!
+            {isExpense ? "Add your spending here!" : "Add your income here!"}
           </h3>
 
-          <InputType setIsExpense={setIsExpense} />
+          {isExpense ? <ExpenseCategory id={id} /> : <IncomeCategory id={id} />}
 
           <div className="flex items-center gap-8">
             <label
@@ -125,13 +129,46 @@ export default function BudgetPlan() {
             />
           </div>
 
+          <button
+            type="submit"
+            className="cursor-pointer rounded-2xl bg-green-800 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-green-700"
+          >
+            Submit!
+          </button>
+        </form>
+
+        <form
+          className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
+          action={handleFormAction}
+        >
+          <h3 className="text-2xl font-bold text-lime-700">
+            {isExpense ? "Edit your spending here!" : "Edit your income here!"}
+          </h3>
+
           {isExpense ? <ExpenseCategory id={id} /> : <IncomeCategory id={id} />}
+
+          <div className="flex items-center gap-8">
+            <label
+              htmlFor={`${id}-amount`}
+              className="text-xl font-bold text-lime-700"
+            >
+              Amount
+            </label>
+            <input
+              type="number"
+              id={`${id}-amount`}
+              name="amount"
+              className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
+              placeholder="0"
+              required
+            />
+          </div>
 
           <button
             type="submit"
             className="cursor-pointer rounded-2xl bg-green-800 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-green-700"
           >
-            Submit
+            Update now!
           </button>
         </form>
       </div>
