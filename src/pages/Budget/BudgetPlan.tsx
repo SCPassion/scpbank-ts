@@ -14,7 +14,7 @@ type FetchTransactionsResponse = {
 }
 export default function BudgetPlan() {
   const user = useUserStore((state) => state.user)
-  const { budgets, setBudgets } = useBudgetsStore()
+  const { budgets, setBudgets, addBudget, removeBudget } = useBudgetsStore()
 
   const id = useId()
   // default state for expense/income toggle
@@ -42,7 +42,35 @@ export default function BudgetPlan() {
     user && fetchTransactions(user)
   }, [user])
 
-  console.log(budgets)
+  // Subscribe to changes in the transactions table in supabase
+  useEffect(() => {
+    const subscription = supabase
+      .channel("transactions-change")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "transactions",
+          filter: `user_id=eq.${user?.id}`,
+        },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            addBudget(payload.new as Budget)
+            console.log("Transaction added:", payload.new)
+          } else if (payload.eventType === "DELETE") {
+            removeBudget(payload.old.id)
+            console.log("Transaction deleted:", payload.old)
+          }
+        },
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(subscription)
+    }
+  }, [user])
+
   function handleFormAction(formData: FormData) {
     const type = String(formData.get("type"))
     const amount = Number(formData.get("amount"))

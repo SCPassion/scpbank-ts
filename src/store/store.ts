@@ -72,8 +72,18 @@ export const usePriceDatasStore = create<PriceDatasStore>((set) => ({
 type BudgetStore = {
   budgets: Budget[] | null
   setBudgets: (budgets: Budget[]) => void
+  addBudget: (budget: Budget) => void
+  removeBudget: (id: number) => void
 }
 export const useBudgetsStore = create<BudgetStore>((set) => ({
   budgets: null,
   setBudgets: (budgets) => set({ budgets }),
+  addBudget: (budget) =>
+    set((state) => ({
+      budgets: state.budgets ? [...state.budgets, budget] : [budget],
+    })),
+  removeBudget: (id) =>
+    set((state) => ({
+      budgets: state.budgets?.filter((budget) => budget.id !== id),
+    })),
 }))
