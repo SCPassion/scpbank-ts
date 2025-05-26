@@ -65,7 +65,7 @@ export default function Sidebar({ ...rest }) {
 
       {user === null ? (
         <form
-          className="mt-2 flex flex-col gap-4 rounded-2xl bg-gray-700 px-8 py-5 text-xl font-bold"
+          className="mt-12 flex flex-col gap-4 rounded-2xl bg-gray-700 px-8 py-5 text-xl font-bold"
           action={handleLogin}
         >
           <p>Sign in!</p>
@@ -82,7 +82,7 @@ export default function Sidebar({ ...rest }) {
           </button>
         </form>
       ) : (
-        <div className="mt-4 flex flex-col gap-4 rounded-2xl bg-gray-700 px-8 py-5 text-xl font-bold">
+        <div className="mt-12 flex flex-col gap-4 rounded-2xl bg-gray-700 px-8 py-5 text-xl font-bold">
           <p className="text-center text-xl font-bold">Welcome!</p>
           <button
             className="mt-4 cursor-pointer rounded-xl bg-red-700 px-4 py-2 text-xl font-bold text-white transition-all duration-300 hover:scale-110 hover:bg-red-600"

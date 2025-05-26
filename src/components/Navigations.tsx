@@ -57,16 +57,6 @@ export default function () {
             Stock Market
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to="investment"
-            className={({ isActive }) =>
-              isActive ? `bg-selectedTab ${normalClass}` : normalClass
-            }
-          >
-            Investment Risk
-          </NavLink>
-        </li>
       </ul>
     </nav>
   )

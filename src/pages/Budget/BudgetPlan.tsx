@@ -7,7 +7,6 @@ import { useBudgetsStore, useUserStore } from "@/store/store"
 import { createCategoryRecord } from "@/functions/budgetOperation"
 import type { PostgrestError, User } from "@supabase/supabase-js"
 import type { Budget } from "@/lib/types"
-import { ChartVisualization } from "./ChartVisualization"
 
 type FetchTransactionsResponse = {
   data: Budget[] | null
@@ -133,8 +132,6 @@ export default function BudgetPlan() {
             Submit
           </button>
         </form>
-
-        <ChartVisualization />
       </div>
     </section>
   )

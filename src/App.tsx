@@ -13,7 +13,7 @@ import AddStock from "./pages/stock/AddStock"
 import Portfolio from "./pages/stock/Portfolio"
 import SymbolDetail from "./pages/stock/SymbolDetail"
 import BudgetPlan from "./pages/Budget/BudgetPlan"
-
+import BudgetPortfolio from "./pages/Budget/BudgetPortfolio"
 function App() {
   return (
     <BrowserRouter>
@@ -48,7 +48,18 @@ function App() {
             <Route index element={<InformationGather />} />
             <Route path="breakdown" element={<InterestBreakDown />} />
           </Route>
-          <Route path="budget" element={<BudgetPlan />} />
+          <Route
+            path="budget"
+            element={
+              <DashboardLayout>
+                <InternalLink to=".">Edit your budget</InternalLink>
+                <InternalLink to="portfolio">Portfolio</InternalLink>
+              </DashboardLayout>
+            }
+          >
+            <Route index element={<BudgetPlan />} />
+            <Route path="portfolio" element={<BudgetPortfolio />} />
+          </Route>
           <Route path="retire" element={<RetirementSave />} />
           <Route
             path="stock"
@@ -63,7 +74,6 @@ function App() {
             <Route path="portfolio" element={<Portfolio />} />
             <Route path="portfolio/:symbol" element={<SymbolDetail />} />
           </Route>
-          <Route path="investment" element={<h1>Invest Risk Simulator</h1>} />
         </Route>
       </Routes>
     </BrowserRouter>
