@@ -98,3 +98,10 @@ export type InvestmentDataFormat = {
   amount_usd: number
   entry_price: number
 }
+
+export type Budget = {
+  id: number
+  type: "expense" | "income"
+  amount: number
+  category: string
+}

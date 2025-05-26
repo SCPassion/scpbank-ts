@@ -5,6 +5,7 @@ import {
   type InterestRecord,
   type SavedSymbol,
   type PriceData,
+  type Budget,
 } from "@/lib/types"
 
 type UserStore = {
@@ -66,4 +67,13 @@ export const usePriceDatasStore = create<PriceDatasStore>((set) => ({
     set((state) => ({
       priceDatas: state.priceDatas?.filter((item) => item.symbol !== symbol),
     })),
+}))
+
+type BudgetStore = {
+  budgets: Budget[] | null
+  setBudgets: (budgets: Budget[]) => void
+}
+export const useBudgetsStore = create<BudgetStore>((set) => ({
+  budgets: null,
+  setBudgets: (budgets) => set({ budgets }),
 }))

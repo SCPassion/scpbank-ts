@@ -1,18 +1,48 @@
-import { useId, useState } from "react"
+import { useEffect, useId, useState } from "react"
 import InputType from "./InputType"
 import ExpenseCategory from "./ExpenseCategory"
 import IncomeCategory from "./IncomeCategory"
 import { supabase } from "@/supabase-client"
-import { useUserStore } from "@/store/store"
+import { useBudgetsStore, useUserStore } from "@/store/store"
 import { createCategoryRecord } from "@/functions/budgetOperation"
+import type { PostgrestError, User } from "@supabase/supabase-js"
+import type { Budget } from "@/lib/types"
 
+type FetchTransactionsResponse = {
+  data: Budget[] | null
+  error: PostgrestError | null
+}
 export default function BudgetPlan() {
   const user = useUserStore((state) => state.user)
+  const { budgets, setBudgets } = useBudgetsStore()
+
   const id = useId()
   // default state for expense/income toggle
   const [isExpense, setIsExpense] = useState(true)
   const [error, setError] = useState<string>("")
 
+  async function fetchTransactions(user: User) {
+    // Fetch user data from Supabase
+    const { data, error }: FetchTransactionsResponse = await supabase
+      .from("transactions")
+      .select("id, type, amount, category")
+      .eq("user_id", user.id)
+
+    if (error) {
+      console.error("Error fetching user data:", error.message)
+      setError("Failed to fetch user data. Please try again.")
+      return
+    }
+
+    if (data) {
+      setBudgets(data)
+    }
+  }
+  useEffect(() => {
+    user && fetchTransactions(user)
+  }, [user])
+
+  console.log(budgets)
   function handleFormAction(formData: FormData) {
     const type = String(formData.get("type"))
     const amount = Number(formData.get("amount"))
