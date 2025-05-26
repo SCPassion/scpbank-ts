@@ -80,6 +80,8 @@ export default function BudgetPlan() {
     console.log({ type, amount, category })
 
     user && createCategoryRecord({ user, type, amount, category, setError })
+
+    setIsExpense(true) // Reset to default state after submission
   }
 
   return (
@@ -95,7 +97,7 @@ export default function BudgetPlan() {
 
       {error && <p className="text-red-500">Error: {error}</p>}
 
-      <div className="flex gap-4">
+      <div className="flex flex-wrap gap-4">
         <form
           className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
           action={handleFormAction}
