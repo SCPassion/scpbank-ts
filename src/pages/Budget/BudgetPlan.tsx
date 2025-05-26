@@ -76,8 +76,8 @@ export default function BudgetPlan() {
     (budget) => budget.type === "expense",
   )
 
-  function handleFormAction(formData: FormData) {
-    const type = String(formData.get("type"))
+  function handleAddAction(formData: FormData) {
+    const type = isExpense ? "expense" : "income"
     const amount = Number(formData.get("amount"))
     const category = String(formData.get(`${type}-category`))
     console.log({ type, amount, category })
@@ -104,13 +104,32 @@ export default function BudgetPlan() {
       <div className="flex flex-wrap justify-center gap-4">
         <form
           className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
-          action={handleFormAction}
+          action={handleAddAction}
         >
           <h3 className="text-2xl font-bold text-lime-700">
             {isExpense ? "Add your spending here!" : "Add your income here!"}
           </h3>
 
-          {isExpense ? <ExpenseCategory id={id} /> : <IncomeCategory id={id} />}
+          {isExpense ? (
+            <ExpenseCategory id={id}>
+              <option value="Housing">Housing</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Utilities">Utilities</option>
+              <option value="Health">Health</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Education">Education</option>
+              <option value="Rent">Rent</option>
+              <option value="Miscellaneous">Miscellaneous</option>
+            </ExpenseCategory>
+          ) : (
+            <IncomeCategory id={id}>
+              <option value="Salary">Salary</option>
+              <option value="Freelance">Freelance</option>
+              <option value="Other">Other</option>
+            </IncomeCategory>
+          )}
 
           <div className="flex items-center gap-8">
             <label
@@ -137,15 +156,31 @@ export default function BudgetPlan() {
           </button>
         </form>
 
-        <form
+        {/* <form
           className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
-          action={handleFormAction}
+          action={handleAddAction}
         >
           <h3 className="text-2xl font-bold text-lime-700">
             {isExpense ? "Edit your spending here!" : "Edit your income here!"}
           </h3>
 
-          {isExpense ? <ExpenseCategory id={id} /> : <IncomeCategory id={id} />}
+          {isExpense ? (
+            <ExpenseCategory id={id}>
+              {expenseCategories?.map((category) => (
+                <option key={category.id} value={category.category}>
+                  {category.category}
+                </option>
+              ))}
+            </ExpenseCategory>
+          ) : (
+            <IncomeCategory id={id}>
+              {incomeCategories?.map((category) => (
+                <option key={category.id} value={category.category}>
+                  {category.category}
+                </option>
+              ))}
+            </IncomeCategory>
+          )}
 
           <div className="flex items-center gap-8">
             <label
@@ -170,7 +205,7 @@ export default function BudgetPlan() {
           >
             Update now!
           </button>
-        </form>
+        </form> */}
       </div>
     </section>
   )

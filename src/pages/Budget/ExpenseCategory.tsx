@@ -1,4 +1,10 @@
-export default function ExpenseCategory({ id }: { id: string }) {
+export default function ExpenseCategory({
+  id,
+  children,
+}: {
+  id: string
+  children: React.ReactNode
+}) {
   return (
     <div className="flex items-center gap-8">
       <label
@@ -17,16 +23,7 @@ export default function ExpenseCategory({ id }: { id: string }) {
         <option value="" disabled>
           -- Choose an expense category
         </option>
-        <option value="Housing">Housing</option>
-        <option value="Food">Food</option>
-        <option value="Transport">Transport</option>
-        <option value="Utilities">Utilities</option>
-        <option value="Health">Health</option>
-        <option value="Shopping">Shopping</option>
-        <option value="Entertainment">Entertainment</option>
-        <option value="Education">Education</option>
-        <option value="Rent">Rent</option>
-        <option value="Miscellaneous">Miscellaneous</option>
+        {children}
       </select>
     </div>
   )

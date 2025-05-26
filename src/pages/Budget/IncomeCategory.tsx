@@ -1,4 +1,10 @@
-export default function IncomeCategory({ id }: { id: string }) {
+export default function IncomeCategory({
+  id,
+  children,
+}: {
+  id: string
+  children: React.ReactNode
+}) {
   return (
     <div className="flex items-center gap-8">
       <label
@@ -17,9 +23,7 @@ export default function IncomeCategory({ id }: { id: string }) {
         <option value="" disabled>
           -- Choose an income category
         </option>
-        <option value="Salary">Salary</option>
-        <option value="Freelance">Freelance</option>
-        <option value="Other">Other</option>
+        {children}
       </select>
     </div>
   )
