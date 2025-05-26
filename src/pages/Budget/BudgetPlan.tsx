@@ -7,6 +7,7 @@ import { useBudgetsStore, useUserStore } from "@/store/store"
 import { createCategoryRecord } from "@/functions/budgetOperation"
 import type { PostgrestError, User } from "@supabase/supabase-js"
 import type { Budget } from "@/lib/types"
+import { ChartVisualization } from "./ChartVisualization"
 
 type FetchTransactionsResponse = {
   data: Budget[] | null
@@ -71,6 +72,8 @@ export default function BudgetPlan() {
     }
   }, [user])
 
+  const chartData = budgets?.map((budget) => console.log(budget))
+
   function handleFormAction(formData: FormData) {
     const type = String(formData.get("type"))
     const amount = Number(formData.get("amount"))
@@ -93,7 +96,7 @@ export default function BudgetPlan() {
 
       {error && <p className="text-red-500">Error: {error}</p>}
 
-      <div>
+      <div className="flex gap-4">
         <form
           className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
           action={handleFormAction}
@@ -130,6 +133,8 @@ export default function BudgetPlan() {
             Submit
           </button>
         </form>
+
+        <ChartVisualization />
       </div>
     </section>
   )
