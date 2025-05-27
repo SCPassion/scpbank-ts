@@ -22,7 +22,6 @@ export default function BudgetPlan() {
   const user = useUserStore((state) => state.user)
   const { budgets, setBudgets, addBudget, updateBudget, removeBudget } =
     useBudgetsStore()
-
   const id = useId()
   // default state for expense/income toggle
   const [isExpense, setIsExpense] = useState(true)
@@ -137,10 +136,38 @@ export default function BudgetPlan() {
     setIsExpense(true) // Reset to default state after submission
   }
 
+  async function removeCategoryRecord(user: User, budgetId: number) {
+    try {
+      const { error } = await supabase
+        .from("transactions")
+        .delete()
+        .eq("id", budgetId)
+        .eq("user_id", user.id)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      console.log(`Delete budget with id ${budgetId}`)
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message)
+        setError(error.message)
+      }
+    }
+  }
+
   function handleRemoveAction(formData: FormData) {
     const type = isExpense ? "expense" : "income"
     const category = String(formData.get(`${type}-category`))
     console.log("Removing:", { type, category })
+
+    if (budgets === null) return
+    const selectedBudget = budgets.find(
+      (budget) => budget.category === category && budget.type === type,
+    ) as Budget
+
+    user && removeCategoryRecord(user, selectedBudget.id)
   }
 
   return (
