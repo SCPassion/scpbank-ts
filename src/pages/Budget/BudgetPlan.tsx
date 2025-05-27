@@ -12,9 +12,16 @@ type FetchTransactionsResponse = {
   data: Budget[] | null
   error: PostgrestError | null
 }
+type EditCategoryRecordProps = {
+  user: User
+  amount: number
+  type: "expense" | "income"
+  category: string
+}
 export default function BudgetPlan() {
   const user = useUserStore((state) => state.user)
-  const { budgets, setBudgets, addBudget, removeBudget } = useBudgetsStore()
+  const { budgets, setBudgets, addBudget, updateBudget, removeBudget } =
+    useBudgetsStore()
 
   const id = useId()
   // default state for expense/income toggle
@@ -61,6 +68,10 @@ export default function BudgetPlan() {
           } else if (payload.eventType === "DELETE") {
             removeBudget(payload.old.id)
             console.log("Transaction deleted:", payload.old)
+          } else if (payload.eventType === "UPDATE") {
+            const updatedBudget = payload.new as Budget
+            updateBudget(updatedBudget.id, updatedBudget)
+            console.log("Transaction updated:", updatedBudget)
           }
         },
       )
@@ -87,22 +98,51 @@ export default function BudgetPlan() {
     setIsExpense(true) // Reset to default state after submission
   }
 
+  async function editCategoryRecord({
+    user,
+    type,
+    amount,
+    category,
+  }: EditCategoryRecordProps) {
+    try {
+      const { error } = await supabase
+        .from("transactions")
+        .update({
+          amount,
+          category,
+        })
+        .eq("user_id", user.id)
+        .eq("category", category)
+
+      if (error) {
+        console.log(`${error.message}`)
+        throw new Error(error.message)
+      }
+
+      console.log("Category record updated successfully")
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message)
+        setError(error.message)
+      }
+    }
+  }
+
   function handleEditAction(formData: FormData) {
     const type = isExpense ? "expense" : "income"
     const amount = Number(formData.get("amount"))
     const category = String(formData.get(`${type}-category`))
     console.log("Editing:", { type, amount, category })
+    user && editCategoryRecord({ user, type, amount, category })
+    setIsExpense(true) // Reset to default state after submission
   }
 
   function handleRemoveAction(formData: FormData) {
     const type = isExpense ? "expense" : "income"
-    const amount = Number(formData.get("amount"))
     const category = String(formData.get(`${type}-category`))
-    console.log("Removing:", { type, amount, category })
-
-    //Remove the budget item from the store
-    removeBudget(budgets?.find((b) => b.category === category)?.id || 0)
+    console.log("Removing:", { type, category })
   }
+
   return (
     <section className="mx-32 my-6 flex flex-col items-center justify-center gap-6 text-center">
       <h1 className="font-bol text-4xl">
@@ -116,7 +156,7 @@ export default function BudgetPlan() {
 
       {error && <p className="text-red-500">Error: {error}</p>}
 
-      <InputType setIsExpense={setIsExpense} />
+      <InputType isExpense={isExpense} setIsExpense={setIsExpense} />
       <div className="flex flex-wrap justify-center gap-4">
         <form
           className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
@@ -250,23 +290,6 @@ export default function BudgetPlan() {
               ))}
             </IncomeCategory>
           )}
-
-          <div className="flex items-center gap-8">
-            <label
-              htmlFor={`${id}-remove-amount`}
-              className="text-xl font-bold text-lime-700"
-            >
-              Amount
-            </label>
-            <input
-              type="number"
-              id={`${id}-remove-amount`}
-              name="amount"
-              className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
-              placeholder="0"
-              required
-            />
-          </div>
 
           <button
             type="submit"

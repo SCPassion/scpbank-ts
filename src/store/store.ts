@@ -73,6 +73,7 @@ type BudgetStore = {
   budgets: Budget[] | null
   setBudgets: (budgets: Budget[]) => void
   addBudget: (budget: Budget) => void
+  updateBudget: (id: number, updatedBudget: Budget) => void
   removeBudget: (id: number) => void
 }
 export const useBudgetsStore = create<BudgetStore>((set) => ({
@@ -81,6 +82,12 @@ export const useBudgetsStore = create<BudgetStore>((set) => ({
   addBudget: (budget) =>
     set((state) => ({
       budgets: state.budgets ? [...state.budgets, budget] : [budget],
+    })),
+  updateBudget: (id, updatedBudget) =>
+    set((state) => ({
+      budgets: state.budgets?.map((budget) =>
+        budget.id === id ? { ...budget, ...updatedBudget } : budget,
+      ),
     })),
   removeBudget: (id) =>
     set((state) => ({
