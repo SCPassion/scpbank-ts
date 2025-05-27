@@ -7,15 +7,10 @@ import { useBudgetsStore, useUserStore } from "@/store/store"
 import {
   createCategoryRecord,
   editCategoryRecord,
+  fetchTransactions,
   removeCategoryRecord,
 } from "@/functions/budgetOperation"
-import type { PostgrestError, User } from "@supabase/supabase-js"
 import type { Budget } from "@/lib/types"
-
-type FetchTransactionsResponse = {
-  data: Budget[] | null
-  error: PostgrestError | null
-}
 
 export default function BudgetPlan() {
   const user = useUserStore((state) => state.user)
@@ -26,25 +21,8 @@ export default function BudgetPlan() {
   const [isExpense, setIsExpense] = useState(true)
   const [error, setError] = useState<string>("")
 
-  async function fetchTransactions(user: User) {
-    // Fetch user data from Supabase
-    const { data, error }: FetchTransactionsResponse = await supabase
-      .from("transactions")
-      .select("id, type, amount, category")
-      .eq("user_id", user.id)
-
-    if (error) {
-      console.error("Error fetching user data:", error.message)
-      setError("Failed to fetch user data. Please try again.")
-      return
-    }
-
-    if (data) {
-      setBudgets(data)
-    }
-  }
   useEffect(() => {
-    user && fetchTransactions(user)
+    user && fetchTransactions(user, setError, setBudgets)
   }, [user])
 
   // Subscribe to changes in the transactions table in supabase

@@ -1,5 +1,6 @@
+import type { Budget } from "@/lib/types"
 import { supabase } from "@/supabase-client"
-import type { User } from "@supabase/supabase-js"
+import type { PostgrestError, User } from "@supabase/supabase-js"
 
 export type CreateCategoryRecordProp = {
   user: User
@@ -113,5 +114,32 @@ export async function editCategoryRecord({
       console.log(error.message)
       setError(error.message)
     }
+  }
+}
+
+type FetchTransactionsResponse = {
+  data: Budget[] | null
+  error: PostgrestError | null
+}
+// Fetch everything from the supabase transactions table
+export async function fetchTransactions(
+  user: User,
+  setError: (error: string) => void,
+  setBudgets: (budgets: Budget[]) => void,
+) {
+  // Fetch user data from Supabase
+  const { data, error }: FetchTransactionsResponse = await supabase
+    .from("transactions")
+    .select("id, type, amount, category")
+    .eq("user_id", user.id)
+
+  if (error) {
+    console.error("Error fetching user data:", error.message)
+    setError("Failed to fetch user data. Please try again.")
+    return
+  }
+
+  if (data) {
+    setBudgets(data)
   }
 }
