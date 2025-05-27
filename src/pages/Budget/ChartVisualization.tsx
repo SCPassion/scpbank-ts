@@ -1,17 +1,7 @@
-"use client"
-
 import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
+import { Legend, Label, Pie, PieChart } from "recharts"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   type ChartConfig,
   ChartContainer,
@@ -81,6 +71,14 @@ export function ChartVisualization<
                 }}
               />
             </Pie>
+            <Legend
+              layout="horizontal" // Horizontal layout
+              align="center" // Center align
+              verticalAlign="bottom" // Place at the bottom
+              wrapperStyle={{
+                padding: "5px 50px",
+              }}
+            />
           </PieChart>
         </ChartContainer>
       </CardContent>
