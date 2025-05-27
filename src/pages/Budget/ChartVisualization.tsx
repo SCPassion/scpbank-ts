@@ -18,36 +18,12 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "green" },
-  { browser: "safari", visitors: 200, fill: "blue" },
-  { browser: "firefox", visitors: 287, fill: "red" },
-  { browser: "edge", visitors: 173, fill: "orange" },
-  { browser: "other", visitors: 190, fill: "purple" },
-]
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-  },
-  safari: {
-    label: "Safari",
-  },
-  firefox: {
-    label: "Firefox",
-  },
-  edge: {
-    label: "Edge",
-  },
-  other: {
-    label: "Other",
-  },
-} satisfies ChartConfig
+const chartConfig = {} satisfies ChartConfig
 
-export function ChartVisualization() {
+export function ChartVisualization<
+  T extends { browser: string; visitors: number; fill: string },
+>({ chartData }: { chartData: T[] }) {
   const totalVisitors = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
   }, [])

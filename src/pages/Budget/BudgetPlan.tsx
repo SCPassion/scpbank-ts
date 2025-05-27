@@ -58,11 +58,6 @@ export default function BudgetPlan() {
     }
   }, [user])
 
-  const incomeCategories = budgets?.filter((budget) => budget.type === "income")
-  const expenseCategories = budgets?.filter(
-    (budget) => budget.type === "expense",
-  )
-
   function handleAddAction(formData: FormData) {
     const type = isExpense ? "expense" : "income"
     const amount = Number(formData.get("amount"))
@@ -96,6 +91,11 @@ export default function BudgetPlan() {
 
     user && removeCategoryRecord(user, selectedBudget.id, setError)
   }
+
+  const incomeCategories = budgets?.filter((budget) => budget.type === "income")
+  const expenseCategories = budgets?.filter(
+    (budget) => budget.type === "expense",
+  )
 
   return (
     <section className="mx-32 my-6 flex flex-col items-center justify-center gap-6 text-center">
