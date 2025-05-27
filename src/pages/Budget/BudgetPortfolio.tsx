@@ -34,12 +34,16 @@ export default function BudgetPortfolio() {
   console.log("Income Categories:", incomeCategories)
   console.log("Expense Categories:", expenseCategories)
   return (
-    <div className="mt-4 items-center justify-center gap-8">
+    <div className="mt-4 flex items-center justify-center gap-4">
       {expenseChartData && (
-        <ChartVisualization chartData={expenseChartData} type="expense" />
+        <div className="h-64 w-full max-w-sm">
+          <ChartVisualization chartData={expenseChartData} type="expense" />
+        </div>
       )}
       {incomeChartData && (
-        <ChartVisualization chartData={incomeChartData} type="income" />
+        <div className="h-64 w-full max-w-sm">
+          <ChartVisualization chartData={incomeChartData} type="income" />
+        </div>
       )}
     </div>
   )

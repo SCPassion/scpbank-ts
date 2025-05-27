@@ -30,14 +30,14 @@ export function ChartVisualization<
   }, [])
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col bg-lime-100">
       <CardHeader className="items-center pb-0">
-        <CardTitle>{`${type[0].toUpperCase()}${type.slice(1)} Chart`}</CardTitle>
+        <CardTitle className="text-center text-3xl">{`${type[0].toUpperCase()}${type.slice(1)} Chart`}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[350px] rounded-4xl bg-lime-50"
         >
           <PieChart>
             <ChartTooltip
