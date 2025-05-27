@@ -52,3 +52,66 @@ export async function createCategoryRecord({
     }
   }
 }
+
+export async function removeCategoryRecord(
+  user: User,
+  budgetId: number,
+  setError: (error: string) => void,
+) {
+  try {
+    const { error } = await supabase
+      .from("transactions")
+      .delete()
+      .eq("id", budgetId)
+      .eq("user_id", user.id)
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    console.log(`Delete budget with id ${budgetId}`)
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+      setError(error.message)
+    }
+  }
+}
+
+type EditCategoryRecordProps = {
+  user: User
+  amount: number
+  type: "expense" | "income"
+  category: string
+  setError: (error: string) => void
+}
+export async function editCategoryRecord({
+  user,
+  type,
+  amount,
+  category,
+  setError,
+}: EditCategoryRecordProps) {
+  try {
+    const { error } = await supabase
+      .from("transactions")
+      .update({
+        amount,
+        category,
+      })
+      .eq("user_id", user.id)
+      .eq("category", category)
+
+    if (error) {
+      console.log(`${error.message}`)
+      throw new Error(error.message)
+    }
+
+    console.log("Category record updated successfully")
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message)
+      setError(error.message)
+    }
+  }
+}

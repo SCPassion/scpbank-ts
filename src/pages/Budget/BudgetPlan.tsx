@@ -4,7 +4,11 @@ import ExpenseCategory from "./ExpenseCategory"
 import IncomeCategory from "./IncomeCategory"
 import { supabase } from "@/supabase-client"
 import { useBudgetsStore, useUserStore } from "@/store/store"
-import { createCategoryRecord } from "@/functions/budgetOperation"
+import {
+  createCategoryRecord,
+  editCategoryRecord,
+  removeCategoryRecord,
+} from "@/functions/budgetOperation"
 import type { PostgrestError, User } from "@supabase/supabase-js"
 import type { Budget } from "@/lib/types"
 
@@ -12,12 +16,7 @@ type FetchTransactionsResponse = {
   data: Budget[] | null
   error: PostgrestError | null
 }
-type EditCategoryRecordProps = {
-  user: User
-  amount: number
-  type: "expense" | "income"
-  category: string
-}
+
 export default function BudgetPlan() {
   const user = useUserStore((state) => state.user)
   const { budgets, setBudgets, addBudget, updateBudget, removeBudget } =
@@ -97,64 +96,14 @@ export default function BudgetPlan() {
     setIsExpense(true) // Reset to default state after submission
   }
 
-  async function editCategoryRecord({
-    user,
-    type,
-    amount,
-    category,
-  }: EditCategoryRecordProps) {
-    try {
-      const { error } = await supabase
-        .from("transactions")
-        .update({
-          amount,
-          category,
-        })
-        .eq("user_id", user.id)
-        .eq("category", category)
-
-      if (error) {
-        console.log(`${error.message}`)
-        throw new Error(error.message)
-      }
-
-      console.log("Category record updated successfully")
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message)
-        setError(error.message)
-      }
-    }
-  }
-
   function handleEditAction(formData: FormData) {
     const type = isExpense ? "expense" : "income"
     const amount = Number(formData.get("amount"))
     const category = String(formData.get(`${type}-category`))
     console.log("Editing:", { type, amount, category })
-    user && editCategoryRecord({ user, type, amount, category })
+
+    user && editCategoryRecord({ user, type, amount, category, setError })
     setIsExpense(true) // Reset to default state after submission
-  }
-
-  async function removeCategoryRecord(user: User, budgetId: number) {
-    try {
-      const { error } = await supabase
-        .from("transactions")
-        .delete()
-        .eq("id", budgetId)
-        .eq("user_id", user.id)
-
-      if (error) {
-        throw new Error(error.message)
-      }
-
-      console.log(`Delete budget with id ${budgetId}`)
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message)
-        setError(error.message)
-      }
-    }
   }
 
   function handleRemoveAction(formData: FormData) {
@@ -167,7 +116,7 @@ export default function BudgetPlan() {
       (budget) => budget.category === category && budget.type === type,
     ) as Budget
 
-    user && removeCategoryRecord(user, selectedBudget.id)
+    user && removeCategoryRecord(user, selectedBudget.id, setError)
   }
 
   return (
