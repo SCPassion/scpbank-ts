@@ -22,17 +22,17 @@ import {
 const chartConfig = {} satisfies ChartConfig
 
 export function ChartVisualization<
-  T extends { browser: string; visitors: number; fill: string },
->({ chartData }: { chartData: T[] }) {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
+  T extends { category: string; amount: number; fill: string },
+>({ chartData, type }: { chartData: T[]; type: "income" | "expense" }) {
+  console.log(type)
+  const totalNumber = React.useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.amount, 0)
   }, [])
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{`${type[0].toUpperCase()}${type.slice(1)} Chart`}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -46,8 +46,8 @@ export function ChartVisualization<
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="amount"
+              nameKey="category"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -66,14 +66,14 @@ export function ChartVisualization<
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalNumber.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          {`Total ${type[0].toUpperCase()}${type.slice(1)}`}
                         </tspan>
                       </text>
                     )
@@ -84,14 +84,6 @@ export function ChartVisualization<
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   )
 }
