@@ -1,10 +1,11 @@
+import { useId } from "react"
+
 export default function IncomeCategory({
-  id,
   children,
 }: {
-  id: string
   children: React.ReactNode
 }) {
+  const id = useId()
   return (
     <div className="flex items-center gap-8">
       <label

@@ -94,16 +94,25 @@ export default function BudgetPlan() {
     console.log("Editing:", { type, amount, category })
   }
 
+  function handleRemoveAction(formData: FormData) {
+    const type = isExpense ? "expense" : "income"
+    const amount = Number(formData.get("amount"))
+    const category = String(formData.get(`${type}-category`))
+    console.log("Removing:", { type, amount, category })
+
+    //Remove the budget item from the store
+    removeBudget(budgets?.find((b) => b.category === category)?.id || 0)
+  }
   return (
     <section className="mx-32 my-6 flex flex-col items-center justify-center gap-6 text-center">
       <h1 className="font-bol text-4xl">
         SmartBudget: Track Your Income & Expenses with Ease
       </h1>
-      <p className="text-center text-lg">
+      {/* <p className="text-center text-lg">
         Log your income and expenses, visualize where your money goes with
         dynamic charts, and get real-time summaries. No clutter. No complexity.
         Just your money, clearly organized.
-      </p>
+      </p> */}
 
       {error && <p className="text-red-500">Error: {error}</p>}
 
@@ -118,7 +127,7 @@ export default function BudgetPlan() {
           </h3>
 
           {isExpense ? (
-            <ExpenseCategory id={id}>
+            <ExpenseCategory>
               <option value="Housing">Housing</option>
               <option value="Food">Food</option>
               <option value="Transport">Transport</option>
@@ -131,7 +140,7 @@ export default function BudgetPlan() {
               <option value="Miscellaneous">Miscellaneous</option>
             </ExpenseCategory>
           ) : (
-            <IncomeCategory id={id}>
+            <IncomeCategory>
               <option value="Salary">Salary</option>
               <option value="Freelance">Freelance</option>
               <option value="Other">Other</option>
@@ -140,14 +149,14 @@ export default function BudgetPlan() {
 
           <div className="flex items-center gap-8">
             <label
-              htmlFor={`${id}-amount`}
+              htmlFor={`${id}-add-amount`}
               className="text-xl font-bold text-lime-700"
             >
               Amount
             </label>
             <input
               type="number"
-              id={`${id}-amount`}
+              id={`${id}-add-amount`}
               name="amount"
               className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
               placeholder="0"
@@ -172,7 +181,7 @@ export default function BudgetPlan() {
           </h3>
 
           {isExpense ? (
-            <ExpenseCategory id={id}>
+            <ExpenseCategory>
               {expenseCategories?.map((category) => (
                 <option key={category.id} value={category.category}>
                   {category.category}
@@ -180,7 +189,7 @@ export default function BudgetPlan() {
               ))}
             </ExpenseCategory>
           ) : (
-            <IncomeCategory id={id}>
+            <IncomeCategory>
               {incomeCategories?.map((category) => (
                 <option key={category.id} value={category.category}>
                   {category.category}
@@ -191,14 +200,14 @@ export default function BudgetPlan() {
 
           <div className="flex items-center gap-8">
             <label
-              htmlFor={`${id}-amount`}
+              htmlFor={`${id}-edit-amount`}
               className="text-xl font-bold text-lime-700"
             >
               Amount
             </label>
             <input
               type="number"
-              id={`${id}-amount`}
+              id={`${id}-edit-amount`}
               name="amount"
               className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
               placeholder="0"
@@ -211,6 +220,59 @@ export default function BudgetPlan() {
             className="cursor-pointer rounded-2xl bg-green-800 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-green-700"
           >
             Update now!
+          </button>
+        </form>
+
+        <form
+          className="flex flex-col gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
+          action={handleRemoveAction}
+        >
+          <h3 className="text-2xl font-bold text-lime-700">
+            {isExpense
+              ? "Remove your spending here!"
+              : "Remove your income here!"}
+          </h3>
+
+          {isExpense ? (
+            <ExpenseCategory>
+              {expenseCategories?.map((category) => (
+                <option key={category.id} value={category.category}>
+                  {category.category}
+                </option>
+              ))}
+            </ExpenseCategory>
+          ) : (
+            <IncomeCategory>
+              {incomeCategories?.map((category) => (
+                <option key={category.id} value={category.category}>
+                  {category.category}
+                </option>
+              ))}
+            </IncomeCategory>
+          )}
+
+          <div className="flex items-center gap-8">
+            <label
+              htmlFor={`${id}-remove-amount`}
+              className="text-xl font-bold text-lime-700"
+            >
+              Amount
+            </label>
+            <input
+              type="number"
+              id={`${id}-remove-amount`}
+              name="amount"
+              className="grow-1 bg-lime-200 px-4 py-1 text-xl placeholder:text-gray-700"
+              placeholder="0"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="cursor-pointer rounded-2xl bg-green-800 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-green-700"
+          >
+            Remove now!
           </button>
         </form>
       </div>
