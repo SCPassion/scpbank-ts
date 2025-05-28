@@ -11,11 +11,18 @@ import {
   removeCategoryRecord,
 } from "@/functions/budgetOperation"
 import type { Budget } from "@/lib/types"
+import type { User } from "@supabase/supabase-js"
 
 export default function BudgetPlan() {
   const user = useUserStore((state) => state.user)
-  const { budgets, setBudgets, addBudget, updateBudget, removeBudget } =
-    useBudgetsStore()
+  const {
+    budgets,
+    setBudgets,
+    addBudget,
+    updateBudget,
+    removeBudget,
+    clearBudgets,
+  } = useBudgetsStore()
   const id = useId()
   // default state for expense/income toggle
   const [isExpense, setIsExpense] = useState(true)
@@ -92,6 +99,32 @@ export default function BudgetPlan() {
     user && removeCategoryRecord(user, selectedBudget.id, setError)
   }
 
+  async function clearBudget(user: User) {
+    try {
+      const { error } = await supabase
+        .from("transactions")
+        .delete()
+        .eq("user_id", user.id)
+      if (error) {
+        console.error("Error clearing budgets:", error.message)
+        throw new Error(error.message)
+      } else {
+        console.log("All budgets cleared successfully")
+        clearBudgets() // Clear the budgets state
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error clearing budgets:", error.message)
+        setError(error.message)
+      }
+    }
+  }
+  function handleClearAction() {
+    if (budgets === null) return
+    console.log("Clearing all budgets")
+    user && clearBudget(user)
+  }
+
   const incomeCategories = budgets?.filter((budget) => budget.type === "income")
   const expenseCategories = budgets?.filter(
     (budget) => budget.type === "expense",
@@ -99,7 +132,7 @@ export default function BudgetPlan() {
 
   return (
     <section className="mx-32 my-6 flex flex-col items-center justify-center gap-6 text-center">
-      <h1 className="font-bol text-4xl">
+      <h1 className="text-4xl">
         SmartBudget: Track Your Income & Expenses with Ease
       </h1>
       {/* <p className="text-center text-lg">
@@ -250,6 +283,22 @@ export default function BudgetPlan() {
             className="cursor-pointer rounded-2xl bg-green-800 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-green-700"
           >
             Remove now!
+          </button>
+        </form>
+
+        <form
+          className="flex flex-col justify-center gap-4 rounded-2xl border-4 border-green-500 bg-lime-100 p-8 shadow-lg duration-300 hover:border-8 hover:border-lime-800 hover:shadow-xl"
+          action={handleClearAction}
+        >
+          <h3 className="text-2xl font-bold text-lime-700">
+            Clear all budget record now!
+          </h3>
+
+          <button
+            type="submit"
+            className="cursor-pointer rounded-2xl bg-green-800 px-4 py-2 text-xl font-bold text-lime-100 duration-300 hover:bg-green-700"
+          >
+            Clear now!
           </button>
         </form>
       </div>

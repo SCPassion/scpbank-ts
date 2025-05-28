@@ -75,6 +75,7 @@ type BudgetStore = {
   addBudget: (budget: Budget) => void
   updateBudget: (id: number, updatedBudget: Budget) => void
   removeBudget: (id: number) => void
+  clearBudgets: () => void
 }
 export const useBudgetsStore = create<BudgetStore>((set) => ({
   budgets: null,
@@ -93,4 +94,5 @@ export const useBudgetsStore = create<BudgetStore>((set) => ({
     set((state) => ({
       budgets: state.budgets?.filter((budget) => budget.id !== id),
     })),
+  clearBudgets: () => set({ budgets: null }),
 }))

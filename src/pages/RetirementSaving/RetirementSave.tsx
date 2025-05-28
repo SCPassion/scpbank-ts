@@ -24,7 +24,9 @@ export default function RetirementSave() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-12 px-8 py-8 text-center">
-      <h2 className="font-bol text-4xl">See Your Future Savings at a Glance</h2>
+      <h2 className="text-4xl font-bold">
+        See Your Future Savings at a Glance
+      </h2>
       <p>
         Want to know how much your monthly contributions will grow over time?
         <br />
