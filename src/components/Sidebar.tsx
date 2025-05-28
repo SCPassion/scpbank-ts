@@ -11,7 +11,7 @@ export default function Sidebar({ ...rest }) {
 
   useEffect(() => {
     console.log("listening for auth changes")
-    const session = supabase.auth.onAuthStateChange(async (event, session) => {
+    const session = supabase.auth.onAuthStateChange(async (_, session) => {
       if (session?.user) {
         console.log("user", session?.user)
         setUser(session.user)
