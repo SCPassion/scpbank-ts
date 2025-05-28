@@ -4,10 +4,11 @@ import { supabase } from "@/supabase-client"
 import { type AuthResponse } from "@supabase/supabase-js"
 
 import { useUserStore } from "@/store/store"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export default function Sidebar({ ...rest }) {
   const { user, setUser } = useUserStore()
+  const [sentLink, setSentLink] = useState(false)
 
   useEffect(() => {
     console.log("listening for auth changes")
@@ -41,6 +42,7 @@ export default function Sidebar({ ...rest }) {
       }
 
       console.log("Check your email for the login link!")
+      setSentLink(true)
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error signing in:", error.message)
@@ -68,18 +70,21 @@ export default function Sidebar({ ...rest }) {
           className="mt-12 flex flex-col gap-4 rounded-2xl bg-gray-700 px-8 py-5 text-xl font-bold"
           action={handleLogin}
         >
-          <p>Sign in!</p>
+          <p>{sentLink ? "Check your email!" : "Get email link!"}</p>
           <input
             type="email"
             placeholder="Email"
             aria-label="email"
-            className="rounded-xl border-2 border-white px-4 py-2 text-sm font-semibold"
+            className="rounded-xl border-2 border-white px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:bg-gray-600"
             required
+            disabled={sentLink}
             name="email"
           />
-          <button className="bg-selectedTab hover:bg-selectedTabHover cursor-pointer rounded-xl py-3 transition-all duration-300 hover:scale-110 hover:bg-green-700">
-            Get email link!
-          </button>
+          {!sentLink && (
+            <button className="bg-selectedTab hover:bg-selectedTabHover cursor-pointer rounded-xl py-3 transition-all duration-300 hover:scale-110 hover:bg-green-700">
+              Get email link!
+            </button>
+          )}
         </form>
       ) : (
         <div className="mt-12 flex flex-col gap-4 rounded-2xl bg-gray-700 px-8 py-5 text-xl font-bold">
