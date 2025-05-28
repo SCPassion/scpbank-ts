@@ -15,13 +15,14 @@ import SymbolDetail from "./pages/stock/SymbolDetail"
 import BudgetPlan from "./pages/Budget/BudgetPlan"
 import BudgetPortfolio from "./pages/Budget/BudgetPortfolio"
 import AuthRequired from "./pages/Auth/AuthRequired"
+import BaseDashboard from "./pages/BaseDashboard"
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout />}>
           <Route element={<AuthRequired />}>
-            <Route path="/" element={<h1>hello</h1>} />
+            <Route path="/" element={<BaseDashboard />} />
             <Route
               path="savings"
               element={

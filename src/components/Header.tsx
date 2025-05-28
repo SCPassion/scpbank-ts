@@ -7,9 +7,7 @@ export default function Header({ ...rest }) {
 
   return (
     <div {...rest}>
-      <h1 className="cursor-pointer">
-        {emailName === "" ? "Please login in first!" : emailName}
-      </h1>
+      <h1>{emailName === "" ? "Please login in first!" : emailName}</h1>
       <p className="text-3xl font-normal text-[#9F9F9F]">{`>> ${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`}</p>
     </div>
   )
