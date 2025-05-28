@@ -14,65 +14,68 @@ import Portfolio from "./pages/stock/Portfolio"
 import SymbolDetail from "./pages/stock/SymbolDetail"
 import BudgetPlan from "./pages/Budget/BudgetPlan"
 import BudgetPortfolio from "./pages/Budget/BudgetPortfolio"
+import AuthRequired from "./pages/Auth/AuthRequired"
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<h1>hello</h1>} />
-          <Route
-            path="savings"
-            element={
-              <DashboardLayout>
-                <InternalLink to=".">Dashboard</InternalLink>
-                <InternalLink to="create">Create Vault</InternalLink>
-                <InternalLink to="delete">Delete Vault</InternalLink>
-                <InternalLink to="add">Add Money</InternalLink>
-              </DashboardLayout>
-            }
-          >
-            <Route index element={<VaultSummary />} />
-            <Route path="create" element={<CreateVault />} />
-            <Route path="delete" element={<DeleteVault />} />
-            <Route path="add" element={<AddMoney />} />
-          </Route>
-          <Route
-            path="interest"
-            element={
-              <DashboardLayout>
-                <InternalLink to=".">Setup</InternalLink>
-                <InternalLink to="breakdown">Break-Down</InternalLink>
-              </DashboardLayout>
-            }
-          >
-            <Route index element={<InformationGather />} />
-            <Route path="breakdown" element={<InterestBreakDown />} />
-          </Route>
-          <Route
-            path="budget"
-            element={
-              <DashboardLayout>
-                <InternalLink to=".">Edit your budget</InternalLink>
-                <InternalLink to="portfolio">Portfolio</InternalLink>
-              </DashboardLayout>
-            }
-          >
-            <Route index element={<BudgetPlan />} />
-            <Route path="portfolio" element={<BudgetPortfolio />} />
-          </Route>
-          <Route path="retire" element={<RetirementSave />} />
-          <Route
-            path="stock"
-            element={
-              <DashboardLayout>
-                <InternalLink to=".">Add your stock</InternalLink>
-                <InternalLink to="portfolio">Your Portfolio</InternalLink>
-              </DashboardLayout>
-            }
-          >
-            <Route index element={<AddStock />} />
-            <Route path="portfolio" element={<Portfolio />} />
-            <Route path="portfolio/:symbol" element={<SymbolDetail />} />
+          <Route element={<AuthRequired />}>
+            <Route path="/" element={<h1>hello</h1>} />
+            <Route
+              path="savings"
+              element={
+                <DashboardLayout>
+                  <InternalLink to=".">Dashboard</InternalLink>
+                  <InternalLink to="create">Create Vault</InternalLink>
+                  <InternalLink to="delete">Delete Vault</InternalLink>
+                  <InternalLink to="add">Add Money</InternalLink>
+                </DashboardLayout>
+              }
+            >
+              <Route index element={<VaultSummary />} />
+              <Route path="create" element={<CreateVault />} />
+              <Route path="delete" element={<DeleteVault />} />
+              <Route path="add" element={<AddMoney />} />
+            </Route>
+            <Route
+              path="interest"
+              element={
+                <DashboardLayout>
+                  <InternalLink to=".">Setup</InternalLink>
+                  <InternalLink to="breakdown">Break-Down</InternalLink>
+                </DashboardLayout>
+              }
+            >
+              <Route index element={<InformationGather />} />
+              <Route path="breakdown" element={<InterestBreakDown />} />
+            </Route>
+            <Route
+              path="budget"
+              element={
+                <DashboardLayout>
+                  <InternalLink to=".">Edit your budget</InternalLink>
+                  <InternalLink to="portfolio">Portfolio</InternalLink>
+                </DashboardLayout>
+              }
+            >
+              <Route index element={<BudgetPlan />} />
+              <Route path="portfolio" element={<BudgetPortfolio />} />
+            </Route>
+            <Route path="retire" element={<RetirementSave />} />
+            <Route
+              path="stock"
+              element={
+                <DashboardLayout>
+                  <InternalLink to=".">Add your stock</InternalLink>
+                  <InternalLink to="portfolio">Your Portfolio</InternalLink>
+                </DashboardLayout>
+              }
+            >
+              <Route index element={<AddStock />} />
+              <Route path="portfolio" element={<Portfolio />} />
+              <Route path="portfolio/:symbol" element={<SymbolDetail />} />
+            </Route>
           </Route>
         </Route>
       </Routes>
