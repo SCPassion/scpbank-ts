@@ -1,4 +1,4 @@
-import type { PostgrestError, User } from "@supabase/supabase-js"
+import type { PostgrestError } from "@supabase/supabase-js"
 
 export type Vault = {
   purpose: string

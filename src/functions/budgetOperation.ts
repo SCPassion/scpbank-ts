@@ -82,13 +82,11 @@ export async function removeCategoryRecord(
 type EditCategoryRecordProps = {
   user: User
   amount: number
-  type: "expense" | "income"
   category: string
   setError: (error: string) => void
 }
 export async function editCategoryRecord({
   user,
-  type,
   amount,
   category,
   setError,

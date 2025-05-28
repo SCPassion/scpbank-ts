@@ -12,7 +12,6 @@ import {
   removeCategoryRecord,
 } from "@/functions/budgetOperation"
 import type { Budget } from "@/lib/types"
-import type { User } from "@supabase/supabase-js"
 
 export default function BudgetPlan() {
   const user = useUserStore((state) => state.user)
@@ -83,7 +82,7 @@ export default function BudgetPlan() {
     const category = String(formData.get(`${type}-category`))
     console.log("Editing:", { type, amount, category })
 
-    user && editCategoryRecord({ user, type, amount, category, setError })
+    user && editCategoryRecord({ user, amount, category, setError })
     setIsExpense(true) // Reset to default state after submission
   }
 

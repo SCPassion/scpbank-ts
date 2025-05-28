@@ -1,4 +1,4 @@
-import { NavLink, Link } from "react-router"
+import { NavLink } from "react-router"
 
 export default function () {
   const normalClass =
