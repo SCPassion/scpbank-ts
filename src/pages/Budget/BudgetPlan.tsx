@@ -5,6 +5,7 @@ import IncomeCategory from "./IncomeCategory"
 import { supabase } from "@/supabase-client"
 import { useBudgetsStore, useUserStore } from "@/store/store"
 import {
+  clearCategories,
   createCategoryRecord,
   editCategoryRecord,
   fetchTransactions,
@@ -99,30 +100,10 @@ export default function BudgetPlan() {
     user && removeCategoryRecord(user, selectedBudget.id, setError)
   }
 
-  async function clearBudget(user: User) {
-    try {
-      const { error } = await supabase
-        .from("transactions")
-        .delete()
-        .eq("user_id", user.id)
-      if (error) {
-        console.error("Error clearing budgets:", error.message)
-        throw new Error(error.message)
-      } else {
-        console.log("All budgets cleared successfully")
-        clearBudgets() // Clear the budgets state
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error clearing budgets:", error.message)
-        setError(error.message)
-      }
-    }
-  }
   function handleClearAction() {
     if (budgets === null) return
     console.log("Clearing all budgets")
-    user && clearBudget(user)
+    user && clearCategories({ user, setError, clearBudgets })
   }
 
   const incomeCategories = budgets?.filter((budget) => budget.type === "income")

@@ -143,3 +143,34 @@ export async function fetchTransactions(
     setBudgets(data)
   }
 }
+
+type ClearBudgetsProps = {
+  user: User
+  clearBudgets: () => void
+  setError: (error: string) => void
+}
+
+export async function clearCategories({
+  user,
+  clearBudgets,
+  setError,
+}: ClearBudgetsProps) {
+  try {
+    const { error } = await supabase
+      .from("transactions")
+      .delete()
+      .eq("user_id", user.id)
+    if (error) {
+      console.error("Error clearing budgets:", error.message)
+      throw new Error(error.message)
+    } else {
+      console.log("All budgets cleared successfully")
+      clearBudgets() // Clear the budgets state
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error clearing budgets:", error.message)
+      setError(error.message)
+    }
+  }
+}
